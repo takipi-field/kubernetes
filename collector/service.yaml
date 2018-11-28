@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: overops-collector-service
+spec:
+  selector:
+    app: overops-collector
+  ports:
+  - protocol: TCP
+    port: 6060
+    targetPort: 6060

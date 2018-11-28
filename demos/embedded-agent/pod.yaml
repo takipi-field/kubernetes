@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+ name: embedded-agent-pod
+spec:
+ containers:
+ - image: embedded-agent-demo
+   imagePullPolicy: Never
+   name: embedded-agent-demo
+   env:
+   - name: TAKIPI_COLLECTOR_HOST
+     value: "overops-collector-service"
+   - name: TAKIPI_COLLECTOR_PORT
+     value: "6060"
+ 
