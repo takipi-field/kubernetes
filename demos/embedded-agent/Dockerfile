@@ -1,13 +1,13 @@
 FROM centos:6
 
-RUN yum install -y java-1.8.0-openjdk java-1.8.0-openjdk-devel git maven wget
+RUN yum install -y java-1.8.0-openjdk java-1.8.0-openjdk-devel git wget
 
 ENV JAVA_HOME /etc/alternatives/jre
 
 WORKDIR /opt/demo
 
 # use the event generator demo app
-RUN git clone https://github.com/daverted/overops-event-generator.git . ; ./mvnw clean package -DskipTests
+RUN git clone https://github.com/takipi-field/overops-event-generator . ; ./mvnw clean package -DskipTests
 
 # set default environmental variables
 ENV TAKIPI_AGENT_HOME=/opt/takipi
