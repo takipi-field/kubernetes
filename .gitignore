@@ -1,0 +1,6 @@
+.DS_Store
+
+agent/takipi
+
+collector/private/collector.properties
+collector/private/installation.key
