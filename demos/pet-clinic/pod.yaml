@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+ name: pet-clinic-pod
+ labels:
+   takipi: inject-agent
+spec:
+ containers:
+ - image: pet-clinic
+   imagePullPolicy: Never
+   name: pet-clinic

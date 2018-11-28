@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+ name: shopping-cart-pod
+ labels:
+   takipi: inject-agent
+spec:
+ containers:
+ - image: shopping-cart
+   imagePullPolicy: Never
+   name: shopping-cart

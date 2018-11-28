@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: error-generator-deployment
+  labels:
+    app: error-generator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: error-generator
+  template:
+    metadata:
+      labels:
+        app: error-generator
+        takipi: inject-agent
+    spec:
+      containers:
+      - image: error-generator
+        name: error-generator
+        imagePullPolicy: Never

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shopping-cart-deployment
+  labels:
+    app: shopping-cart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shopping-cart
+  template:
+    metadata:
+      labels:
+        app: shopping-cart
+        takipi: inject-agent
+    spec:
+      containers:
+      - image: shopping-cart
+        name: shopping-cart
+        imagePullPolicy: Never
