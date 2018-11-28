@@ -1,0 +1,8 @@
+jvmPath=${JAVA_HOME}/lib/amd64/server/libjvm.so
+libraryPath=/opt/takipi/lib
+
+takipi.backend.url=https://backend.overops.com
+takipi.storage.test.url=https://s3.amazonaws.com/app-takipi-com/ConnectionTest
+takipi.jvm.heap.size=1G
+takipi.listen.port=6060
+takipi.server.name=docker
