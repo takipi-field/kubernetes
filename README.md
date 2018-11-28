@@ -60,9 +60,9 @@ To stop the cluster, simply run `minikube stop`.
 
 ## Next Steps
 
-- [Deploying the Collector](collector/README.md)
-- [Create a Pod Preset for the Agent](agent/README.md)
-- [Monitoring containerized apps](demos/README.md)
+- [Deploying the Collector](collector)
+- [Create a Pod Preset for the Agent](agent)
+- [Monitoring containerized apps](demos)
 
 ## Docker Commands Cheat Sheet
 Basic Docker commands can be found on the [Docker Cheat Sheet](https://www.docker.com/sites/default/files/Docker_CheatSheet_08.09.2016_0.pdf)
