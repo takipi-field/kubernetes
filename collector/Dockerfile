@@ -1,23 +1,16 @@
 FROM centos:6
 
-# java-1.8.0-openjdk-devel git maven
-RUN yum install -y java-1.8.0-openjdk wget
+# install OpenJDK 8
+RUN yum install -y java-1.8.0-openjdk
 
+# set JAVA_HOME
 ENV JAVA_HOME /etc/alternatives/jre
 
-# # set default environmental variables
-# ENV TAKIPI_AGENT_HOME=/opt/takipi
-# ENV TAKIPI_COLLECTOR_HOST=collector
-# ENV TAKIPI_COLLECTOR_PORT=6060
-# ENV JAVA_TOOL_OPTIONS=-agentpath:$TAKIPI_AGENT_HOME/lib/libTakipiAgent.so
-
+# install into the /opt directory
 WORKDIR /opt
 
 # download and install the collector
-RUN wget -O takipi-latest.tar.gz -q https://app.overops.com/app/download?t=tgz \
- && tar -xvzf takipi-latest.tar.gz \
- && rm takipi-latest.tar.gz
-
+RUN curl -sL https://app.overops.com/app/download?t=tgz | tar -xvzf -
 
 # use mount to make installation.key and collector.properties available
 WORKDIR /opt/takipi
@@ -29,7 +22,8 @@ RUN mkdir private \
 VOLUME ["/opt/takipi/private"]
 
 # alternately, copy installation.key and collector.properties into the image
-# COPY installation.key /opt/takipi/.
-# COPY collector.properties /opt/takipi/.
+# COPY installation.key /opt/takipi/
+# COPY collector.properties /opt/takipi/
 
+# run the service in verbose mode, printing logs to stdout
 CMD ["/opt/takipi/bin/takipi-service", "-nfd", "-l"]
