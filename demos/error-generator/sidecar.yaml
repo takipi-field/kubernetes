@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: error-generator-sidecar-pod
+spec:
+  volumes:
+  - name: takipi-volume
+    emptyDir: {}
+
+  containers:
+    - name: sidecar-agent
+      image: sidecar-agent
+      imagePullPolicy: Never
+      volumeMounts:
+      - name: takipi-volume
+        mountPath: /shared-data
+
+    - name: error-generator
+      image: error-generator
+      imagePullPolicy: Never
+      env:
+      - name: TAKIPI_COLLECTOR_HOST
+        value: "overops-collector-service"
+      - name: TAKIPI_COLLECTOR_PORT
+        value: "6060"
+      - name: JAVA_TOOL_OPTIONS
+        value: "-agentpath:/takipi/lib/libTakipiAgent.so"
+      volumeMounts:
+      - name: takipi-volume
+        mountPath: /takipi
