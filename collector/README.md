@@ -1,7 +1,7 @@
 # Deploy a Collector
 The Collector [Dockerfile](Dockerfile) is based on the [Linux Rootless Collector Installation](https://doc.overops.com/docs/linux-rootless-collector-install) guide. 
 
-*Before deploying the collector, you'll need to [install Docker and Minikube](../)*
+*Before deploying the collector, you'll need to [install Docker and Minikube](../README.md)*
 
 Two files are needed to run this container: `installation.key` and `collector.properties`. The container expects these two files to be contained in a `private` directory which is mounted into the `/opt/takipi/private` directoy in the container.  Alternatively, the Dockerfile can be modified to copy these two files directly into an image. An example [collector.properties](private/collector.properties.saas.example) can be found in this repo. For more details about these files, see the [rootless guide](https://doc.overops.com/docs/linux-rootless-collector-install).
 
