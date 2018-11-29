@@ -1,37 +1,35 @@
 # Error generator demo
-Basic CentOS 6 image with OpenJDK 8 an error generator app.
+This image contains an error generator demo app. The agent must be added manually with a volume mount and by setting environmental variables, or automatically with a pod preset.
 
+For this exmaple, we'll create and deploy a Pod to our cluster. If you have not already created the `overops-collector-service`, see *[Deploy a Collector](../../collector)*.
+
+First, build the image and tag it as `embedded-agent`:
+
+```console
 docker build . -t error-generator
+```
 
-docker run error-generator
+### Pod Preset
+First, [create the pod preset](../../agent).
 
-run interactively:
-docker run -it error-generator /bin/bash
+Next, deploy the app as a Pod or a Deployment:
 
-run in the background:
-docker run -d error-generator
+```console
+$ kubectl create -f pod.yaml
+```
 
-kubectl create -f pod.yaml
-kubectl get pods -o wide
-kubectl get pods --selector=takipi=inject-agent
+```console
+$ kubectl create -f deployment.yaml
+```
 
-kubectl logs -f error-generator-pod
+### Manual
+Alternatively, we can mount the volume and set environmental variables directly in the Pod config file.
 
-kubectl exec -it error-generator-pod -- /bin/bash
+```console
+$ kubectl create -f volume-mount.yaml
+```
 
-kubectl delete pod error-generator-pod
-
-kubectl create -f deployment.yaml
-kubectl get deployments
-kubectl get pods
-
-
-# if using pod presets...
-sanity check..
-kubectl exec -it pod /bin/bash
-env | grep TAKIPI
-env | grep JAVA_TOOL
-cd /takipi
-ls
-
-kubectl logs -f pod # look for "picked up JAVA_TOOL_OPTIONS
+### Troubleshooting
+- Confirm environmental variables and files are correct. See [Sanity Check](../../agent/#sanity-check)
+- Verify the collector deployment `kubectl get deployments`
+- Verify the collector service `kubectl get services`
