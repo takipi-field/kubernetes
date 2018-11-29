@@ -3,7 +3,7 @@ This image contains an error generator demo app. The agent must be added manuall
 
 For this exmaple, we'll create and deploy a Pod to our cluster. If you have not already created the `overops-collector-service`, see *[Deploy a Collector](../../collector)*.
 
-First, build the image and tag it as `embedded-agent`:
+First, build the image and tag it as `error-generator`:
 
 ```console
 docker build . -t error-generator
