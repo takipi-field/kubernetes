@@ -4,7 +4,7 @@ metadata:
  name: embedded-agent-pod
 spec:
  containers:
- - image: embedded-agent-demo
+ - image: embedded-agent
    imagePullPolicy: Never
    name: embedded-agent-demo
    env:
