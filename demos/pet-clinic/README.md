@@ -3,10 +3,10 @@ This image contains an the [Spring Pet Clinic](https://github.com/spring-project
 
 For this exmaple, we'll create a Deployment. If you have not already created the `overops-collector-service`, see *[Deploy a Collector](../../collector)*.
 
-First, build the image and tag it as `pet-clinic`:
+Build the image and tag it as `pet-clinic`:
 
 ```console
-docker build . -t pet-clinic
+$ docker build . -t pet-clinic
 ```
 
 First, [create the pod preset](../../agent) if you have not already done so.
