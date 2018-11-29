@@ -84,6 +84,11 @@ $ kubectl logs -f my-pod
 Picked up JAVA_TOOL_OPTIONS: -agentpath:/takipi/lib/libTakipiAgent.so
 ```
 
+Confirm tags:
+```console
+$ kubectl get pods --selector=takipi=inject-agent
+```
+
 ## Next Steps
 
 - [Monitor containerized apps](../demos)
