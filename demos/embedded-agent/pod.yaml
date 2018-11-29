@@ -6,7 +6,7 @@ spec:
  containers:
  - image: embedded-agent
    imagePullPolicy: Never
-   name: embedded-agent-demo
+   name: embedded-agent
    env:
    - name: TAKIPI_COLLECTOR_HOST
      value: "overops-collector-service"
