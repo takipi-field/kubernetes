@@ -50,6 +50,12 @@ To confirm your pod has picked up the preset, start a shell on your running pod:
 $ kubectl exec -it my-pod /bin/bash
 ```
 
+If using the sidecar approach, where there are multiple containers in a single pod, specify the correct container:
+
+```console
+$ kubectl exec -it my-pod --container main-app -- /bin/bash
+```
+
 Check for environmental variables:
 
 ```console

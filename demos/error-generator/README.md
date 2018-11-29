@@ -30,6 +30,13 @@ Alternatively, we can mount the volume and set environmental variables directly 
 $ kubectl create -f volume-mount.yaml
 ```
 
+### Sidecar
+If directly mounting a volume or using a pod preset are not viable options, a sidecar can be used instead. First, build the [agent sidecar](../../agent/sidecar) image. This image contains a copy of the Agent in it's `/takipi` directory which it will copy to it's `/shared-data` directory. We'll create a temporary shared volume using [emptyDir](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir). On the sidecar, the shared volume is mounted to `/shared-data`. On the error generator, the shared volume is mounted to the `/takipi` directory.
+
+```console
+$ kubectl create -f sidecar.yaml
+```
+
 ### Troubleshooting
 - Confirm environmental variables and files are correct. See [Sanity Check](../../agent/#sanity-check)
 - Verify the collector deployment `kubectl get deployments`
