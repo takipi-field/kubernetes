@@ -86,6 +86,7 @@ Basic Kubernetes command can be found on the [Kubernetes Cheat Sheet](https://ku
 - get pod presets `kubectl get podPresets`
 - tail pod logs `kubectl tail -f my-pod`
 - get logs for a deployment by tag `kubectl logs -l app=my-app`
+- scale a deployment `kubectl scale deployment my-deployment --replicas=3`
 - autoscale a deployment `kubectl autoscale deployment my-deployment --min=1 --max=3`
 - get autoscaling rules `kubectl get hpa`
 - delete autoscaling rule `kubectl delete hpa my-deployment`
