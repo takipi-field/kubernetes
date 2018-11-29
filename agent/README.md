@@ -84,5 +84,9 @@ $ kubectl logs -f my-pod
 Picked up JAVA_TOOL_OPTIONS: -agentpath:/takipi/lib/libTakipiAgent.so
 ```
 
+## Next Steps
+
+- [Monitor containerized apps](../demos)
+
 # Embedded Agent
 This [Dockerfile](Dockerfile) illustrates how the Agent can be embedded directly into an image. See the [embedded agent demo](../demos/embedded-agent) for a complete working example.
