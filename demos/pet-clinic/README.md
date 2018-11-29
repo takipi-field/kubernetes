@@ -31,7 +31,7 @@ Get the Minikube node IP address:
 $ minikube ip
 ```
 
-In a browser, navigate to http://<minikube-ip>:30080
+In a browser, navigate to http://\<minikube-ip\>:30080
 
 ### Troubleshooting
 - Confirm environmental variables and files are correct. See [Sanity Check](../../agent/#sanity-check)
