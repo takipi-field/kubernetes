@@ -53,16 +53,16 @@ Prior to building Docker images, you'll need to configure your Docker environmen
 $ eval $(minikube docker-env)
 ```
 
-This command needs to be run every time your cluster is restarted and every time you open a new command line window.
+This command needs to be run each time you open a new command line window.
 
 ### Stop your cluster
 To stop the cluster, simply run `minikube stop`.
 
 ## Next Steps
 
-- [Deploying the Collector](collector)
+- [Deploy a Collector](collector)
 - [Create a Pod Preset for the Agent](agent)
-- [Monitoring containerized apps](demos)
+- [Monitor containerized apps](demos)
 
 ## Docker Commands Cheat Sheet
 Basic Docker commands can be found on the [Docker Cheat Sheet](https://www.docker.com/sites/default/files/Docker_CheatSheet_08.09.2016_0.pdf)
