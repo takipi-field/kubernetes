@@ -21,6 +21,7 @@ $ kubectl create -f pod.yaml
 ```console
 $ kubectl create -f deployment.yaml
 ```
+When the Pod is running, go to [app.overops.com](https://app.overops.com/) and confirm connectivity.
 
 ### Manual
 Alternatively, we can mount the volume and set environmental variables directly in the Pod config file.
