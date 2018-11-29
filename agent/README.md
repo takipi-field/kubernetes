@@ -103,4 +103,4 @@ $ kubectl get pods --selector=takipi=inject-agent
 This [Dockerfile](Dockerfile) illustrates how the Agent can be embedded directly into an image. See the [embedded agent demo](../demos/embedded-agent) for a complete working example.
 
 # Sidecar Agent
-This [Dockerfile](sidecar/Dockerfile) illustrates how the Agent can be run as a sidecar.
+This [Dockerfile](sidecar/Dockerfile) illustrates how the Agent can be run as a sidecar. See the [error generator demo](../demos/error-generator) for a complete working example.
