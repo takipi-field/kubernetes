@@ -55,6 +55,8 @@ $ eval $(minikube docker-env)
 
 This command needs to be run each time you open a new command line window.
 
+*Heads up! When building local images to deploy with Kubernetes, set `imagePullPolicy: Never` on the container spec. This prevents your cluster from attempting to remotely fetch a local image.*
+
 ### Stop your cluster
 To stop the cluster, simply run `minikube stop`.
 
