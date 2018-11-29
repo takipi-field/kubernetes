@@ -1,7 +1,7 @@
 # Error generator demo
 This image contains an error generator demo app. The agent must be added manually with a volume mount and by setting environmental variables, or automatically with a pod preset.
 
-For this exmaple, we'll create and deploy a Pod to our cluster. If you have not already created the `overops-collector-service`, see *[Deploy a Collector](../../collector)*.
+For this exmaple, we'll create a Pod or Deployment in our cluster. If you have not already created the `overops-collector-service`, see *[Deploy a Collector](../../collector)*.
 
 First, build the image and tag it as `error-generator`:
 
