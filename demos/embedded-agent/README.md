@@ -1,7 +1,7 @@
 # Embedded Agent Error Generator Demo
 This image fetches and installs the Agent. `TAKIPI_AGENT_HOME` and `JAVA_TOOL_OPTIONS` environmental variables are set in the image. `TAKIPI_COLLECTOR_HOST` and `TAKIPI_COLLECTOR_PORT` must be set at runtime.
 
-For this exmaple, we'll create and deploy a Pod to our cluster. If you have not already created the `overops-collector-service`, see *[Deploy a Collector](../../collector)*.
+For this example, we'll create and deploy a Pod to our cluster. If you have not already created the `overops-collector-service`, see *[Deploy a Collector](../../collector)*.
 
 First, build the image and tag it as `embedded-agent`:
 
