@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: overops-storage-server-deployment
+  labels:
+    app: overops-storage-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: overops-storage-server
+  template:
+    metadata:
+      labels:
+        app: overops-storage-server
+    spec:
+      containers:
+      - name: overops-storage-server
+        image: overops-storage-server:latest
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+          - mountPath: /opt/takipi-storage/storage
+            name: takipi-storage-volume
+        imagePullPolicy: Never
+      volumes:
+        - name: takipi-storage-volume
+          hostPath:
+            # directory location on host
+            path: /Users/overopsdaves/workspace/kubernetes/hybrid/storage
