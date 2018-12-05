@@ -54,7 +54,7 @@ To make our deployment available to other pods running in the cluster and the ou
 $ kubectl create -f service.yaml
 ```
 
-[Verifying Storage Server Installation](https://doc.overops.com/docs/verifying-storage-server-installation):
+[Verifying Storage Server Installation](https://doc.overops.com/docs/verifying-storage-server-installation)
 
 To verify when running in Minikube:
 
