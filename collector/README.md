@@ -42,7 +42,13 @@ docker run -d -p 6060:6060 --mount type=bind,source="$(pwd)"/private,target=/opt
 
 ## Run in Kubernetes
 
-This container expects a `private` directory containing `installation.key` and `collector.properties` to be mounted into the `/opt/takipi/private` directory. Update the `takipi-private-volume` in [deployment.yaml](deployment.yaml) to point to the correct location. Note that mount paths cannot be relative.
+In Kubernetes, we'll store `installation.key` and `collector.properties` as a [Secret](https://kubernetes.io/docs/concepts/configuration/secret/). This allows for streamlined management of installation keys and configurations.
+
+Create the secret from local files:
+
+```console
+kubectl create secret generic overops-collector --from-file=./installation.key --from-file=./collector.properties
+```
 
 To create a Kubernetes deployment:
 

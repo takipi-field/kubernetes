@@ -6,6 +6,6 @@ spec:
   selector:
     app: overops-collector
   ports:
-  - protocol: TCP
-    port: 6060
-    targetPort: 6060
+    - protocol: TCP
+      port: 6060
+      targetPort: 6060

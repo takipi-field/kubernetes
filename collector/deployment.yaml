@@ -5,7 +5,7 @@ metadata:
   labels:
     app: overops-collector
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: overops-collector
@@ -15,16 +15,15 @@ spec:
         app: overops-collector
     spec:
       containers:
-      - name: overops-collector
-        image: overops-collector:latest
-        ports:
-        - containerPort: 6060
-        volumeMounts:
-          - mountPath: /opt/takipi/private
-            name: takipi-private-volume
-        imagePullPolicy: Never
+        - name: overops-collector
+          image: overops-collector:latest
+          ports:
+            - containerPort: 6060
+          volumeMounts:
+            - mountPath: /opt/takipi/private
+              name: overops-private-volume
+          imagePullPolicy: Never
       volumes:
-        - name: takipi-private-volume
-          hostPath:
-            # directory location on host
-            path: /Users/overopsdaves/workspace/kubernetes/collector/private
+        - name: overops-private-volume
+          secret:
+            secretName: overops-collector
