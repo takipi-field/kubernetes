@@ -16,6 +16,6 @@ spec:
         takipi: inject-agent
     spec:
       containers:
-      - image: event-generator
+      - image: 432746435694.dkr.ecr.us-east-1.amazonaws.com/event-generator:latest
         name: event-generator
-        imagePullPolicy: Never
+        imagePullPolicy: Always
