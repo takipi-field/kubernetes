@@ -16,14 +16,14 @@ spec:
     spec:
       containers:
         - name: overops-server
-          image: 432746435694.dkr.ecr.us-east-1.amazonaws.com/overops-server:latest
+          image: overops-server:latest
           ports:
             - containerPort: 8080
           env:
             - name: HOST_URL
               value: "overops-server-service"
             - name: FRONTEND_URL
-              value: "poc-k8s.overops-samples.com"
+              value: "overops.example.com"
             - name: DB_TYPE
               value: "mysql"
             - name: DB_URL
@@ -41,14 +41,7 @@ spec:
                 secretKeyRef:
                   name: overops-server-db
                   key: pass
-          imagePullPolicy: Always
-          resources:
-            requests:
-              cpu: "500m"
-              memory: "4Gi"
-            limits:
-              cpu: "4000m"
-              memory: "32Gi"
+          imagePullPolicy: Never
           volumeMounts:
             - mountPath: /opt/private
               name: overops-server-private-volume
@@ -59,7 +52,6 @@ spec:
           secret:
             secretName: overops-server
         - name: overops-server-data-volume
-          nfs:
-            server: fs-cab39c2b.efs.us-east-1.amazonaws.com
-            path: /poc-storage
+          hostPath:
+            path: /local/path/to/storage
 
