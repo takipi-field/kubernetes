@@ -1,25 +1,25 @@
 apiVersion: settings.k8s.io/v1alpha1
 kind: PodPreset
 metadata:
- name: overops-agent-pod-preset
+  name: overops-agent-pod-preset
 spec:
- selector:
-   matchLabels:
-     takipi: inject-agent
- env:
-   - name: TAKIPI_COLLECTOR_HOST
-     value: "overops-collector-service"
-   - name: TAKIPI_COLLECTOR_PORT
-     value: "6060"
-   - name: TAKIPI_RESOURCES_DIR
-     value: "/tmp"
-   - name: JAVA_TOOL_OPTIONS
-     value: "-agentpath:/takipi/lib/libTakipiAgent.so"
- volumeMounts:
-   - mountPath: /takipi
-     name: takipi-volume
- volumes:
-   - name: takipi-volume
-     hostPath:
-       # directory location on host
-       path: /Users/overopsdaves/workspace/kubernetes/agent/takipi/
+  selector:
+    matchLabels:
+      takipi: inject-agent
+  env:
+    - name: TAKIPI_COLLECTOR_HOST
+      value: "overops-collector-service"
+    - name: TAKIPI_COLLECTOR_PORT
+      value: "6060"
+    - name: TAKIPI_RESOURCES_DIR
+      value: "/tmp"
+    - name: JAVA_TOOL_OPTIONS
+      value: "-agentpath:/takipi/lib/libTakipiAgent.so"
+  volumeMounts:
+    - mountPath: /takipi
+      name: takipi-volume
+  volumes:
+    - name: takipi-volume
+      nfs:
+        server: fs-cab39c2b.efs.us-east-1.amazonaws.com
+        path: /takipi
