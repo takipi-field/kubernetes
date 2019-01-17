@@ -16,6 +16,6 @@ spec:
         takipi: inject-agent
     spec:
       containers:
-      - image: shopping-cart
+      - image: 432746435694.dkr.ecr.us-east-1.amazonaws.com/shopping-cart:latest
         name: shopping-cart
-        imagePullPolicy: Never
+        imagePullPolicy: Always
