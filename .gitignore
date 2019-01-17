@@ -4,3 +4,5 @@ agent/takipi
 
 collector/private/collector.properties
 collector/private/installation.key*
+
+hybrid/storage
