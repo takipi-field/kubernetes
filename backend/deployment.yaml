@@ -21,8 +21,6 @@ spec:
             - containerPort: 8080
           env:
             - name: HOST_URL
-              value: "overops-server-service"
-            - name: FRONTEND_URL
               value: "poc-k8s.overops-samples.com"
             - name: DB_TYPE
               value: "mysql"
