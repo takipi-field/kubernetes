@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: error-generator-sidecar-pod
+  name: event-generator-sidecar-pod
 spec:
   volumes:
   - name: takipi-volume
@@ -15,8 +15,8 @@ spec:
       - name: takipi-volume
         mountPath: /shared-data
 
-    - name: error-generator
-      image: error-generator
+    - name: event-generator
+      image: event-generator
       imagePullPolicy: Never
       env:
       - name: TAKIPI_COLLECTOR_HOST

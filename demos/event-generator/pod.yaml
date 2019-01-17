@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Pod
 metadata:
- name: error-generator-pod
+ name: event-generator-pod
  labels:
    takipi: inject-agent
 spec:
  containers:
- - image: error-generator
+ - image: event-generator
    imagePullPolicy: Never
-   name: error-generator
+   name: event-generator

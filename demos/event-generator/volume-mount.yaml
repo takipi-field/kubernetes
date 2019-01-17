@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Pod
 metadata:
- name: error-generator-pod
+ name: event-generator-pod
 spec:
  containers:
- - image: error-generator
-   name: error-generator
+ - image: event-generator
+   name: event-generator
    imagePullPolicy: Never
    env:
    - name: TAKIPI_COLLECTOR_HOST
