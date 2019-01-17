@@ -28,9 +28,6 @@ VOLUME ["/opt/private"]
 # COPY smtp.properties /opt/takipi-server/conf/tomcat-original
 # COPY smtpserver.properties /opt/takipi-server/conf/tomcat-original
 
-# # run the service in verbose mode, printing logs to stdout
-# CMD ["/opt/takipi/bin/takipi-service", "-nfd", "-l"]
-
 # use a volume to store data
 VOLUME ["/opt/takipi-server/storage"]
 
