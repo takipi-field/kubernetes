@@ -1,12 +1,12 @@
-# Error generator demo
-This image contains an error generator demo app. The agent must be added manually with a volume mount and by setting environmental variables, or automatically with a pod preset.
+# Event generator demo
+This image contains an event generator demo app. The agent must be added manually with a volume mount and by setting environmental variables, or automatically with a pod preset.
 
 For this exmaple, we'll create a Pod or Deployment in our cluster. If you have not already created the `overops-collector-service`, see *[Deploy a Collector](../../collector)*.
 
-Build the image and tag it as `error-generator`:
+Build the image and tag it as `event-generator`:
 
 ```console
-$ docker build . -t error-generator
+$ docker build . -t event-generator
 ```
 
 ### Pod Preset
@@ -35,7 +35,7 @@ If directly mounting a volume or using a pod preset are not viable options, a si
 
 First, build the [agent sidecar](../../agent/sidecar) image.
 
-The sidecar contains a copy of the Agent in it's `/takipi` directory which it will copy to it's `/shared-data` directory at run time. We'll create a temporary shared volume in our Pod using [emptyDir](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir). On the sidecar, the shared volume is mounted to `/shared-data`. On the error generator, the shared volume is mounted to the `/takipi` directory.
+The sidecar contains a copy of the Agent in it's `/takipi` directory which it will copy to it's `/shared-data` directory at run time. We'll create a temporary shared volume in our Pod using [emptyDir](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir). On the sidecar, the shared volume is mounted to `/shared-data`. On the event generator, the shared volume is mounted to the `/takipi` directory.
 
 ```console
 $ kubectl create -f sidecar.yaml

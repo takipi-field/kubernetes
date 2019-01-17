@@ -16,20 +16,13 @@ spec:
     spec:
       containers:
         - name: overops-collector
-          image: 432746435694.dkr.ecr.us-east-1.amazonaws.com/overops-collector:latest
+          image: overops-collector:latest
           ports:
             - containerPort: 6060
           volumeMounts:
             - mountPath: /opt/takipi/private
               name: overops-private-volume
-          imagePullPolicy: Always
-          resources:
-            requests:
-              cpu: "100m"
-              memory: "1Gi"
-            limits:
-              cpu: "4000m"
-              memory: "32Gi"
+          imagePullPolicy: Never
       volumes:
         - name: overops-private-volume
           secret:

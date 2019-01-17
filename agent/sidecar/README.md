@@ -10,4 +10,4 @@ $ docker build . -t sidecar-agent
 ```
 
 # Demo App
-The [error generator](../../demos/error-generator) contains an example Kubernetes [sidecar.yaml](../../demos/error-generator/sidecar.yaml) config file illustrating how to use this container.
+The [event generator](../../demos/event-generator) contains an example Kubernetes [sidecar.yaml](../../demos/event-generator/sidecar.yaml) config file illustrating how to use this container.

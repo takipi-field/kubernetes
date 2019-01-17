@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: overops-server-deployment
+  labels:
+    app: overops-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: overops-server
+  template:
+    metadata:
+      labels:
+        app: overops-server
+    spec:
+      containers:
+        - name: overops-server
+          image: overops-server:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: HOST_URL
+              value: "overops-server-service"
+            - name: FRONTEND_URL
+              value: "overops.example.com"
+            - name: DB_TYPE
+              value: "mysql"
+            - name: DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: overops-server-db
+                  key: url
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: overops-server-db
+                  key: user
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: overops-server-db
+                  key: pass
+          imagePullPolicy: Never
+          volumeMounts:
+            - mountPath: /opt/private
+              name: overops-server-private-volume
+            - mountPath: /opt/takipi-server/storage
+              name: overops-server-data-volume
+      volumes:
+        - name: overops-server-private-volume
+          secret:
+            secretName: overops-server
+        - name: overops-server-data-volume
+          hostPath:
+            path: /local/path/to/storage
+

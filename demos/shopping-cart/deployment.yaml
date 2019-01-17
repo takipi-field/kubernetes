@@ -16,6 +16,6 @@ spec:
         takipi: inject-agent
     spec:
       containers:
-      - image: shopping-cart
+      - image: shopping-cart:latest
         name: shopping-cart
         imagePullPolicy: Never

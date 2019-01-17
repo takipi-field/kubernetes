@@ -20,6 +20,5 @@ spec:
       name: takipi-volume
   volumes:
     - name: takipi-volume
-      nfs:
-        server: fs-cab39c2b.efs.us-east-1.amazonaws.com
-        path: /takipi
+      hostPath:
+        path: /local/path/to/agent/takipi/
