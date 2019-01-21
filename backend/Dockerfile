@@ -17,10 +17,12 @@ RUN mkdir private \
  && mv /opt/takipi-server/conf/tomcat-original/my.server.properties private/my.server.properties \
  && mv /opt/takipi-server/conf/tomcat-original/smtp.properties private/smtp.properties \
  && mv /opt/takipi-server/conf/tomcat-original/smtpserver.properties private/smtpserver.properties \
+ && touch private/my.agentsettings.properties \
  && mkdir -p /opt/takipi-server/conf/tomcat/shared \
  && ln -s /opt/private/my.server.properties /opt/takipi-server/conf/tomcat/shared/my.server.properties \
  && ln -s /opt/private/smtp.properties /opt/takipi-server/conf/tomcat/shared/smtp.properties \
- && ln -s /opt/private/smtpserver.properties /opt/takipi-server/conf/tomcat/shared/smtpserver.properties
+ && ln -s /opt/private/smtpserver.properties /opt/takipi-server/conf/tomcat/shared/smtpserver.properties \
+ && ln -s /opt/private/my.agentsettings.properties /opt/takipi-server/conf/tomcat/shared/my.agentsettings.properties
 VOLUME ["/opt/private"]
 
 # alternately, copy .properties files into the image
