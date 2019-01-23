@@ -25,5 +25,7 @@ VOLUME ["/opt/takipi/private"]
 # COPY installation.key /opt/takipi/
 # COPY collector.properties /opt/takipi/
 
+EXPOSE 6060
+
 # run the service in verbose mode, printing logs to stdout
 CMD ["/opt/takipi/bin/takipi-service", "-nfd", "-l"]

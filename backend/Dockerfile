@@ -49,5 +49,7 @@ RUN echo "#!/bin/bash" > run.sh \
  && echo "/usr/bin/tail -f /opt/takipi-server/log/tomcat/stdout -f /opt/takipi-server/log/tomcat/stderr -f -f /opt/takipi-server/log/tomcat/tomcat/catalina.log" >> run.sh \
  && chmod +x run.sh
 
+EXPOSE 8080
+
 # run the service, printing logs to stdout
 CMD ["./run.sh"]
