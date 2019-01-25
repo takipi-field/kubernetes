@@ -16,13 +16,15 @@ spec:
     spec:
       containers:
       - name: overops-storage-server
-        image: overops-storage-server:latest
+        # image: overops-collector:latest # local build
+        image: overops/storage-server:latest # docker hub
         ports:
         - containerPort: 8080
         volumeMounts:
           - mountPath: /opt/takipi-storage/storage
             name: takipi-storage-volume
-        imagePullPolicy: Never
+        # imagePullPolicy: Never # minikube
+        imagePullPolicy: Always # docker hub
       volumes:
         - name: takipi-storage-volume
           hostPath:

@@ -16,7 +16,9 @@ spec:
     spec:
       containers:
       - name: overops-storage-server
-        image: overops-storage-server:latest
+        # image: overops-collector:latest # local build
+        image: overops/storage-server-s3:latest # docker hub
         ports:
         - containerPort: 8080
-        imagePullPolicy: Never
+         # imagePullPolicy: Never # minikube
+        imagePullPolicy: Always # docker hub

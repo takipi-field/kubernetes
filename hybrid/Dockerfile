@@ -12,11 +12,16 @@ RUN curl -sL https://app-takipi-com.s3.amazonaws.com/deploy/takipi-storage/takip
 # use a volume to store data
 VOLUME ["/opt/takipi-storage/storage"]
 
+# use mount to make settings.yaml available
+VOLUME ["/opt/takipi-storage/private"]
+
 # create a run script
 RUN echo "#!/bin/bash" > run.sh \
- && echo "/usr/bin/java -jar /opt/takipi-storage/lib/takipi-storage.jar server /opt/takipi-storage/settings.yml &> /opt/takipi-storage/log/takipi-storage.log &" >> run.sh \
+ && echo "/usr/bin/java -jar /opt/takipi-storage/lib/takipi-storage.jar server /opt/takipi-storage/private/settings.yml &> /opt/takipi-storage/log/takipi-storage.log &" >> run.sh \
  && echo "/usr/bin/tail -f /opt/takipi-storage/log/takipi-storage.log" >> run.sh \
  && chmod +x run.sh
+
+EXPOSE 8080 8081
 
 # run the service, printing logs to stdout
 CMD ["./run.sh"]
