@@ -6,6 +6,24 @@ _Before deploying the collector, you'll need to [install Docker and Kubernetes](
 
 Two files are needed to run this container: `installation.key` and `collector.properties`. The container expects these two files to be contained in a `private` directory which is mounted into the `/opt/takipi/private` directoy in the container. Alternatively, the Dockerfile can be modified to copy these two files directly into an image. An example [collector.properties](private/collector.properties.saas.example) can be found in this repo. For more details about these files, see the [rootless guide](https://doc.overops.com/docs/linux-rootless-collector-install).
 
+## Quick Start
+
+This image is on Docker Hub: [overops/collector](https://hub.docker.com/r/overops/collector)
+
+### Docker Quick Start
+
+```console
+docker run -d -p 6060:6060 --mount type=bind,source="$(pwd)"/private,target=/opt/takipi/private overops/collector
+```
+
+### Kubernetes Quick Start
+
+```console
+kubectl create secret generic overops-collector --from-file=./installation.key --from-file=./collector.properties
+kubectl apply -f https://raw.githubusercontent.com/takipi-field/kubernetes/master/collector/deployment.yaml
+kubectl apply -f https://raw.githubusercontent.com/takipi-field/kubernetes/master/collector/service.yaml
+```
+
 ## Build
 
 If you're deploying this image locally on a Minikube cluster, first set the Docker environmental variables:

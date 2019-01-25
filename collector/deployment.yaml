@@ -16,13 +16,15 @@ spec:
     spec:
       containers:
         - name: overops-collector
-          image: overops/collector:latest
+          # image: overops-collector:latest # local build
+          image: overops/collector:latest # docker hub
           ports:
             - containerPort: 6060
           volumeMounts:
             - mountPath: /opt/takipi/private
               name: overops-private-volume
-          imagePullPolicy: Always
+          # imagePullPolicy: Never # minikube
+          imagePullPolicy: Always # docker hub
       volumes:
         - name: overops-private-volume
           secret:
