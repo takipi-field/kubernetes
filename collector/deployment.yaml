@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: overops-collector
-          image: 432746435694.dkr.ecr.us-east-1.amazonaws.com/overops-collector:latest
+          image: overops/collector:latest
           ports:
             - containerPort: 6060
           volumeMounts:
