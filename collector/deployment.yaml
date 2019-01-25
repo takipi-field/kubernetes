@@ -16,13 +16,13 @@ spec:
     spec:
       containers:
         - name: overops-collector
-          image: overops-collector:latest
+          image: overops/collector:latest
           ports:
             - containerPort: 6060
           volumeMounts:
             - mountPath: /opt/takipi/private
               name: overops-private-volume
-          imagePullPolicy: Never
+          imagePullPolicy: Always
       volumes:
         - name: overops-private-volume
           secret:
