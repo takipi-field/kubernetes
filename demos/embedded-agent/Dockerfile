@@ -18,4 +18,4 @@ WORKDIR /
 # download and install the agent - extracts into the `takipi` folder.
 RUN curl -sL https://s3.amazonaws.com/app-takipi-com/deploy/linux/takipi-agent-latest.tar.gz | tar -xvzf -
 
-CMD ["java", "-jar", "/opt/demo/target/overops-event-generator-2.0.0.jar"]
+CMD ["java", "-jar", "/opt/demo/target/overops-event-generator-2.1.3.jar"]
