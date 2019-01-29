@@ -4,6 +4,7 @@ FROM centos:6
 WORKDIR /
 
 # download and install the agent - extracts into the `takipi` folder.
+# NOTE for Alpine, use: https://s3.amazonaws.com/sam.sparktale/samv2/snapshots/native/native.0.2449/takipi-alpine-agent-native.0.2449.tar.gz
 RUN curl -sL https://s3.amazonaws.com/app-takipi-com/deploy/linux/takipi-agent-latest.tar.gz | tar -xvzf -
 
 # run script copies data from the /takipi folder into the /shared-data folder and keep the container running
