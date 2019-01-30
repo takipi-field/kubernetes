@@ -19,3 +19,15 @@ spec:
       port: 443
       targetPort: 8080
       name: https
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: overops-server-service-internal
+spec:
+  selector:
+    app: overops-server
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
