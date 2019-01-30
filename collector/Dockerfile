@@ -28,4 +28,4 @@ VOLUME ["/opt/takipi/private"]
 EXPOSE 6060
 
 # run the service in verbose mode, printing logs to stdout
-CMD ["/opt/takipi/bin/takipi-service", "-nfd", "-l"]
+CMD ["/opt/takipi/bin/takipi-service", "-l"]
