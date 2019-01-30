@@ -44,11 +44,11 @@ spec:
           imagePullPolicy: Always
           resources:
             requests:
-              cpu: "500m"
-              memory: "4Gi"
+              cpu: "100m"
+              memory: "1Gi"
             limits:
-              cpu: "4000m"
-              memory: "32Gi"
+              cpu: "1000m"
+              memory: "2Gi"
           volumeMounts:
             - mountPath: /opt/private
               name: overops-server-private-volume
