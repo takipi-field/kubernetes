@@ -28,8 +28,8 @@ spec:
               cpu: "100m"
               memory: "1Gi"
             limits:
-              cpu: "4000m"
-              memory: "32Gi"
+              cpu: "1000m"
+              memory: "2Gi"
       volumes:
         - name: overops-private-volume
           secret:
