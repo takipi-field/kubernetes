@@ -16,14 +16,14 @@ spec:
     spec:
       containers:
         - name: overops-server
-          image: 432746435694.dkr.ecr.us-east-1.amazonaws.com/overops-server:latest
+          image: overops/server:grafana-latest
           ports:
             - containerPort: 8080
           env:
             - name: HOST_URL
               value: "overops-server-service"
             - name: FRONTEND_URL
-              value: "poc-k8s.overops-samples.com"
+              value: "https://poc-k8s.overops-samples.com"
             - name: DB_TYPE
               value: "mysql"
             - name: DB_URL
@@ -54,6 +54,14 @@ spec:
               name: overops-server-private-volume
             - mountPath: /opt/takipi-server/storage
               name: overops-server-data-volume
+          livenessProbe:
+            httpGet:
+              path: /service/png
+              port: 8080
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
       volumes:
         - name: overops-server-private-volume
           secret:
@@ -62,4 +70,3 @@ spec:
           nfs:
             server: fs-cab39c2b.efs.us-east-1.amazonaws.com
             path: /poc-storage
-
