@@ -7,7 +7,7 @@ RUN yum install -y java-1.8.0-openjdk-devel
 ENV JAVA_HOME /etc/alternatives/jre
 
 ENV HOST_URL overops-server
-ENV FRONTEND_URL overops.example.com
+ENV FRONTEND_URL https://overops.example.com
 
 ENV DB_TYPE mysql
 ENV DB_URL database_server_url
