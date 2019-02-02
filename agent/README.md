@@ -44,7 +44,7 @@ kubectl delete podPreset overops-agent-pod-preset
 
 Pods will pick up the preset on create. Delete any currently running pods that you which to pick up the preset. If using a deployment, these pods will automatically be recreated. If running pods directly, manually recreate your pods.
 
-### Sanity Check
+## Sanity Check
 
 To confirm your pod has picked up the preset, start a shell on your running pod:
 
@@ -102,10 +102,10 @@ kubectl get pods --selector=takipi=inject-agent
 
 - [Monitor containerized apps](../demos)
 
-# Embedded Agent
+### Embedded Agent
 
 This [Dockerfile](Dockerfile) illustrates how the Agent can be embedded directly into an image. See the [embedded agent demo](../demos/embedded-agent) for a complete working example.
 
-# Sidecar Agent
+### Sidecar Agent
 
 This [Dockerfile](sidecar/Dockerfile) illustrates how the Agent can be run as a sidecar. See the [event generator demo](../demos/event-generator) for a complete working example.
