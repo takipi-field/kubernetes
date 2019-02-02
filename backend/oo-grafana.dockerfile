@@ -8,7 +8,7 @@ RUN yum update -y \
 ENV JAVA_HOME /etc/alternatives/jre
 
 ENV HOST_URL overops-server
-ENV FRONTEND_URL overops.example.com
+ENV FRONTEND_URL https://overops.example.com
 
 ENV DB_TYPE mysql
 ENV DB_URL database_server_url
@@ -38,12 +38,8 @@ RUN curl -sL https://grafana.com/api/plugins/yesoreyeram-boomtable-panel/version
  && unzip -d data/plugins boomtable-panel.zip \
  && rm boomtable-panel.zip
 
-#
-# HEADS UP! Set TAKIPI_API_URL and TAKIPI_HOST_URL ↓↓↓↓↓
-#
-# configure Grafana hostnames (must be hard coded for now...)
-RUN sed -e "s/\${TAKIPI_API_URL}/http:\/\/overops-service:8080/g" -i conf/provisioning/datasources/oo.yaml
-RUN sed -e "s/\${TAKIPI_HOST_URL}/https:\/\/poc-k8s.overops-samples.com/g" -i conf/custom.ini
+# configure Grafana - OO API runs in same container
+RUN sed -e "s/\${TAKIPI_API_URL}/http:\/\/localhost:8080/g" -i conf/provisioning/datasources/oo.yaml
 
 WORKDIR /opt
 
@@ -67,6 +63,7 @@ VOLUME ["/opt/takipi-server/storage"]
 # create a run script
 RUN echo "#!/bin/bash" > run.sh \
  && echo "cat /opt/takipi-server/VERSION" >> run.sh \
+ && echo "sed -e \"s|\\\${TAKIPI_HOST_URL}|\${FRONTEND_URL}|g\" -i /opt/grafana-5.3.4/conf/custom.ini" >> run.sh \
  && echo "pushd grafana-5.3.4; nohup ./bin/grafana-server web &> grafana.log &" >> run.sh \
  && echo "popd" >> run.sh \
  && echo "/opt/takipi-server/bin/takipi-server.sh -u \${HOST_URL} --frontend-url \${FRONTEND_URL} --db-type \${DB_TYPE} --db-url \${DB_URL} --db-user \${DB_USER} --db-password \${DB_PASS} start" >> run.sh \
