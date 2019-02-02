@@ -16,14 +16,14 @@ spec:
     spec:
       containers:
         - name: overops-server
-          image: overops-server:latest
+          image: overops/server:latest
           ports:
             - containerPort: 8080
           env:
             - name: HOST_URL
               value: "overops-server-service"
             - name: FRONTEND_URL
-              value: "overops.example.com"
+              value: "https://overops.example.com"
             - name: DB_TYPE
               value: "mysql"
             - name: DB_URL
@@ -41,12 +41,27 @@ spec:
                 secretKeyRef:
                   name: overops-server-db
                   key: pass
-          imagePullPolicy: Never
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "1Gi"
+            limits:
+              cpu: "1000m"
+              memory: "2Gi"
           volumeMounts:
             - mountPath: /opt/private
               name: overops-server-private-volume
             - mountPath: /opt/takipi-server/storage
               name: overops-server-data-volume
+          livenessProbe:
+            httpGet:
+              path: /service/png
+              port: 8080
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
       volumes:
         - name: overops-server-private-volume
           secret:
