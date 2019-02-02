@@ -72,7 +72,7 @@ RUN echo "#!/bin/bash" > run.sh \
  && chmod +x run.sh
 
 # print version
-RUN echo "`cat /opt/takipi-server/VERSION`"
+RUN cat /opt/takipi-server/VERSION
 
 EXPOSE 8080
 
