@@ -1,7 +1,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: overops-server-service
+  name: overops-server-service-ext
   labels:
     dns: route53
   annotations:
@@ -23,7 +23,7 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: overops-server-service-internal
+  name: overops-server-service
 spec:
   selector:
     app: overops-server
