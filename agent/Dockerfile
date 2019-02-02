@@ -13,4 +13,5 @@ RUN apt-get update && apt-get -y install curl
 WORKDIR /
 
 # download and install the agent - extracts into the `takipi` folder.
+# NOTE: for Apline linux, use: https://s3.amazonaws.com/sam.sparktale/samv2/snapshots/native/native.0.2449/takipi-alpine-agent-native.0.2449.tar.gz
 RUN curl -sL https://s3.amazonaws.com/app-takipi-com/deploy/linux/takipi-agent-latest.tar.gz | tar -xvzf -
