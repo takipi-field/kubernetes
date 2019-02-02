@@ -21,10 +21,6 @@ RUN mkdir private \
  && ln -s private/collector.properties collector.properties
 VOLUME ["/opt/takipi/private"]
 
-# alternately, copy installation.key and collector.properties into the image
-# COPY installation.key /opt/takipi/
-# COPY collector.properties /opt/takipi/
-
 EXPOSE 6060
 
 # run the service in verbose mode, printing logs to stdout
