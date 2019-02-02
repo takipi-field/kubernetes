@@ -3,8 +3,16 @@ FROM centos:6
 # install OpenJDK 8
 RUN yum install -y java-1.8.0-openjdk-devel
 
-# set JAVA_HOME
+# environmental variables
 ENV JAVA_HOME /etc/alternatives/jre
+
+ENV HOST_URL overops-server
+ENV FRONTEND_URL overops.example.com
+
+ENV DB_TYPE mysql
+ENV DB_URL database_server_url
+ENV DB_USER database_user
+ENV DB_PASS database_password
 
 # install into the /opt directory
 WORKDIR /opt
@@ -25,21 +33,8 @@ RUN mkdir private \
  && ln -s /opt/private/my.agentsettings.properties /opt/takipi-server/conf/tomcat/shared/my.agentsettings.properties
 VOLUME ["/opt/private"]
 
-# alternately, copy .properties files into the image
-# COPY my.server.properties /opt/takipi-server/conf/tomcat-original
-# COPY smtp.properties /opt/takipi-server/conf/tomcat-original
-# COPY smtpserver.properties /opt/takipi-server/conf/tomcat-original
-
 # use a volume to store data
 VOLUME ["/opt/takipi-server/storage"]
-
-# environmental variables
-ENV HOST_URL overops-server
-ENV FRONTEND_URL overops.example.com
-ENV DB_TYPE mysql
-ENV DB_URL database_server_url
-ENV DB_USER database_user
-ENV DB_PASS database_password
 
 # create a run script
 RUN echo "#!/bin/bash" > run.sh \
@@ -48,6 +43,9 @@ RUN echo "#!/bin/bash" > run.sh \
  && echo "/bin/sleep 10" >> run.sh \
  && echo "/usr/bin/tail -f /opt/takipi-server/log/tomcat/stdout -f /opt/takipi-server/log/tomcat/stderr -f -f /opt/takipi-server/log/tomcat/tomcat/catalina.log" >> run.sh \
  && chmod +x run.sh
+
+# print version
+RUN echo "`cat /opt/takipi-server/VERSION`"
 
 EXPOSE 8080
 
