@@ -69,4 +69,15 @@ spec:
         - name: overops-server-data-volume
           hostPath:
             path: /local/path/to/storage
-
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: overops-server-service
+spec:
+  selector:
+    app: overops-server
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080

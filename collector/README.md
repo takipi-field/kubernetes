@@ -20,8 +20,7 @@ docker run -d -p 6060:6060 --mount type=bind,source="$(pwd)"/private,target=/opt
 
 ```console
 kubectl create secret generic overops-collector --from-file=./installation.key --from-file=./collector.properties
-kubectl apply -f https://raw.githubusercontent.com/takipi-field/kubernetes/master/collector/deployment.yaml
-kubectl apply -f https://raw.githubusercontent.com/takipi-field/kubernetes/master/collector/service.yaml
+kubectl apply -f https://raw.githubusercontent.com/takipi-field/kubernetes/master/collector/overops-collector.yaml
 ```
 
 ## Build
@@ -68,32 +67,26 @@ Create the secret from local files:
 kubectl create secret generic overops-collector --from-file=./installation.key --from-file=./collector.properties
 ```
 
-To create a Kubernetes deployment:
+Modify [`overops-collector.yaml`](overops-collector.yaml) as needed for your environment, then create the deployment and service:
 
 ```console
-kubectl create -f deployment.yaml
-```
-
-To make our deployment available to other pods running in the cluster, we'll create a service:
-
-```console
-kubectl create -f service.yaml
+kubectl apply -f overops-collector.yaml
 ```
 
 With the service running, go to [app.overops.com](https://app.overops.com/) and confirm your Collector is connected.
 
 ![Image confirming Collector is connected](collector-connected.png)
 
-To remove the deployment:
+To update, set the deployment container image to the latest version:
 
 ```console
-kubectl delete -f deployment.yaml
+kubectl set image deployment.v1.apps/overops-collector-deployment overops-collector=overops/collector:4.30.8 --record
 ```
 
-To remove the service:
+To remove:
 
 ```console
-kubectl delete -f service.yaml
+kubectl delete -f overops-collector.yaml
 ```
 
 ## Next Steps

@@ -16,12 +16,10 @@ spec:
     spec:
       containers:
       - name: overops-storage-server
-        # image: overops-collector:latest # local build
-        image: overops/storage-server:latest # docker hub
+        image: overops/storage-server:latest
         ports:
         - containerPort: 8080
-        # imagePullPolicy: Never # minikube
-        imagePullPolicy: Always # docker hub
+        imagePullPolicy: Always
         volumeMounts:
           - mountPath: /opt/takipi-storage/storage
             name: takipi-storage-volume
@@ -35,3 +33,23 @@ spec:
           hostPath:
             # directory location on host
             path: /Users/overopsdaves/workspace/kubernetes/hybrid/storage
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: overops-storage-service
+spec:
+  selector:
+    app: overops-storage-server
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+    nodePort: 30080
+    name: server
+  - protocol: TCP
+    port: 8081
+    targetPort: 8081
+    nodePort: 30081
+    name: admin
