@@ -98,6 +98,12 @@ kubectl apply -f overops-server.yaml
 
 With the service running, go to `http://FRONTEND_URL` in a web browser and confirm your server is running.
 
+To update, set the deployment container image to the latest version:
+
+```console
+kubectl set image deployment.v1.apps/overops-server-deployment overops-server=overops/server:4.30.9 --record
+```
+
 To remove:
 
 ```console
