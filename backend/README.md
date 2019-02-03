@@ -23,6 +23,22 @@ Several environment variables are required:
 
 In order to persist storage beyond the lifespan of the container, mount a volume to `/opt/takipi-server/storage`.
 
+## Quick Start
+
+This image is on Docker Hub: [overops/server](https://hub.docker.com/r/overops/server)
+
+### Docker Quick Start
+
+```console
+docker run -p 8080:8080 \
+--mount type=bind,source="$(pwd)"/private,target=/opt/private \
+--mount type=bind,source="$(pwd)"/storage,target=/opt/takipi-server/storage \
+-e HOST_URL=localhost:8080 \
+-e FRONTEND_URL=http://localhost:8080 \
+-e DB_TYPE=h2 \
+overops/server
+```
+
 ## Build
 
 Build the image and tag it `overops-server`. This may take some time.
@@ -39,8 +55,8 @@ This container expects a `private` directory containing `.properties` files to b
 docker run -p 8080:8080 \
 --mount type=bind,source="$(pwd)"/private,target=/opt/private \
 --mount type=bind,source="$(pwd)"/storage,target=/opt/takipi-server/storage \
--e HOST_URL=localhost \
--e FRONTEND_URL=localhost \
+-e HOST_URL=localhost:8080 \
+-e FRONTEND_URL=http://localhost:8080 \
 -e DB_TYPE=h2 \
 overops-server
 ```
@@ -60,6 +76,7 @@ Create the configuration secret from local files:
 ```console
 kubectl create secret generic overops-server \
 --from-file=private/my.server.properties \
+--from-file=private/my.agentsettings.properties \
 --from-file=private/smtp.properties \
 --from-file=private/smtpserver.properties
 ```
@@ -73,30 +90,40 @@ kubectl create secret generic overops-server-db \
 --from-literal=url=<URL_HERE>
 ```
 
-To create a Kubernetes deployment:
+Modify [`overops-server.yaml`](overops-server.yaml) as needed for your environment, then create the deployment and service:
 
 ```console
-kubectl create -f deployment.yaml
-```
-
-To make our deployment available to other pods running in the cluster, we'll create a service:
-
-```console
-kubectl create -f service.yaml
+kubectl apply -f overops-server.yaml
 ```
 
 With the service running, go to `http://FRONTEND_URL` in a web browser and confirm your server is running.
 
-To remove the deployment:
+To remove:
 
 ```console
-kubectl delete -f deployment.yaml
+kubectl delete -f overops-server.yaml
 ```
 
-To remove the service:
+## Reliability Dashboards
+
+To enable Reliability Dashboards, uncomment Grafana settings in [my.server.properties](private/my.server.properties).
+
+To include Grafana bundled with the OverOps backend, use the [`oo-grafana.dockerfile`](oo-grafana.dockerfile)
 
 ```console
-kubectl delete -f service.yaml
+docker build . -f oo-grafana.dockerfile -t overops-server:grafana
+```
+
+This image is on Docker Hub: [overops/server:grafana-latest](https://hub.docker.com/r/overops/server/tags)
+
+```console
+docker run -p 8080:8080 \
+--mount type=bind,source="$(pwd)"/private,target=/opt/private \
+--mount type=bind,source="$(pwd)"/storage,target=/opt/takipi-server/storage \
+-e HOST_URL=localhost:8080 \
+-e FRONTEND_URL=http://localhost:8080 \
+-e DB_TYPE=h2 \
+overops/server:grafana-latest
 ```
 
 ## Next Steps
