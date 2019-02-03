@@ -1,0 +1,43 @@
+folderPath: /opt/takipi-storage/storage
+maxUsedStoragePercentage: 0.90
+enableCors: true
+corsOrigins: "*"
+retentionPeriodDays: 92
+cleanupJobEnabled: true
+
+server:
+#  softNofileLimit: 1000
+#  hardNofileLimit: 1000
+  applicationConnectors:
+    - type: http
+      port: 8080
+# this requires the alpn-boot library on the JVM's boot classpath
+#    - type: spdy3
+#      port: 8445
+#      keyStorePath: example.keystore
+#      keyStorePassword: example
+#      validateCerts: false
+  adminConnectors:
+    - type: http
+      port: 8081
+      
+jobs:
+  cleanup: 6h
+
+# Logging settings.
+logging:
+
+  # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
+  level: INFO
+
+  # Logger-specific levels.
+  loggers:
+
+    com.takipi: DEBUG
+
+  appenders:
+    - type: file
+      currentLogFilename: /opt/takipi-storage/log/takipi-storage.log
+      maxFileSize: 1GB
+      archivedLogFilenamePattern: /opt/takipi-storage/log/takipi-storage-%i.log.gz
+      archivedFileCount: 1
