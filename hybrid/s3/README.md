@@ -24,8 +24,7 @@ docker run -d -p 8080:8080 --mount type=bind,source="$(pwd)"/private,target=/opt
 
 ```console
 kubectl create secret generic overops-storage --from-file=./settings.yaml
-kubectl apply -f https://raw.githubusercontent.com/takipi-field/kubernetes/master/hybrid/s3/deployment.yaml
-kubectl apply -f https://raw.githubusercontent.com/takipi-field/kubernetes/master/hybrid/s3/service.yaml
+kubectl apply -f https://raw.githubusercontent.com/takipi-field/kubernetes/master/hybrid/s3/overops-storage-server-s3.yaml
 ```
 
 ## Build
@@ -73,16 +72,10 @@ Create the secret from local file:
 kubectl create secret generic overops-storage --from-file=./settings.yaml
 ```
 
-To create a Kubernetes deployment:
+Modify [`overops-storage-server.yaml`](overops-storage-server.yaml) as needed for your environment, then create the deployment and service:
 
 ```console
-kubectl create -f deployment.yaml
-```
-
-To make our deployment available to other pods running in the cluster and the outside world, create a service:
-
-```console
-kubectl create -f service.yaml
+kubectl apply -f overops-storage-server-s3.yaml
 ```
 
 [Verifying Storage Server Installation](https://doc.overops.com/docs/verifying-storage-server-installation)
@@ -97,14 +90,8 @@ Content-Type: text/plain
 Content-Length: 2
 ```
 
-To remove the deployment:
+To remove:
 
 ```console
-kubectl delete -f deployment.yaml
-```
-
-To remove the service:
-
-```console
-kubectl delete -f service.yaml
+kubectl delete -f overops-storage-server-s3.yaml
 ```

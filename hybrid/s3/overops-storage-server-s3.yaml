@@ -16,12 +16,10 @@ spec:
     spec:
       containers:
       - name: overops-storage-server
-        # image: overops-collector:latest # local build
-        image: overops/storage-server-s3:latest # docker hub
+        image: overops/storage-server-s3:latest
         ports:
         - containerPort: 8080
-         # imagePullPolicy: Never # minikube
-        imagePullPolicy: Always # docker hub
+        imagePullPolicy: Always
         volumeMounts:
           - mountPath: /opt/takipi-storage/private
             name: overops-storage-private-volume
@@ -29,3 +27,18 @@ spec:
         - name: overops-storage-private-volume
           secret:
             secretName: overops-storage
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: overops-storage-service
+spec:
+  selector:
+    app: overops-storage-server
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+    nodePort: 30080
+    name: storage-server

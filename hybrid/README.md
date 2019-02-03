@@ -24,8 +24,7 @@ docker run -d -p 8080:8080 -p 8081:8081 --mount type=bind,source="$(pwd)"/storag
 
 ```console
 kubectl create secret generic overops-storage --from-file=./settings.yaml
-kubectl apply -f https://raw.githubusercontent.com/takipi-field/kubernetes/master/hybrid/deployment.yaml
-kubectl apply -f https://raw.githubusercontent.com/takipi-field/kubernetes/master/hybrid/service.yaml
+kubectl apply -f https://raw.githubusercontent.com/takipi-field/kubernetes/master/hybrid/overops-storage-server.yaml
 ```
 
 ## Build
@@ -78,16 +77,10 @@ kubectl create secret generic overops-storage --from-file=./settings.yaml
 
 Choose the [Volume](https://kubernetes.io/docs/concepts/storage/volumes/) type that makes the most sense for your cluster. When running locally in Minikube, we'll use [hostPath](https://kubernetes.io/docs/concepts/storage/volumes/#hostpath).
 
-To create a Kubernetes deployment:
+Modify [`overops-storage-server.yaml`](overops-storage-server.yaml) as needed for your environment, then create the deployment and service:
 
 ```console
-kubectl create -f deployment.yaml
-```
-
-To make our deployment available to other pods running in the cluster and the outside world, create a service:
-
-```console
-kubectl create -f service.yaml
+kubectl apply -f overops-storage-server.yaml
 ```
 
 [Verifying Storage Server Installation](https://doc.overops.com/docs/verifying-storage-server-installation)
@@ -102,14 +95,8 @@ Content-Type: text/plain
 Content-Length: 2
 ```
 
-To remove the deployment:
+To remove:
 
 ```console
-kubectl delete -f deployment.yaml
-```
-
-To remove the service:
-
-```console
-kubectl delete -f service.yaml
+kubectl delete -f overops-storage-server.yaml
 ```
