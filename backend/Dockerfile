@@ -41,7 +41,7 @@ RUN echo "#!/bin/bash" > run.sh \
  && echo "cat /opt/takipi-server/VERSION" >> run.sh \
  && echo "/opt/takipi-server/bin/takipi-server.sh -u \${HOST_URL} --frontend-url \${FRONTEND_URL} --db-type \${DB_TYPE} --db-url \${DB_URL} --db-user \${DB_USER} --db-password \${DB_PASS} start" >> run.sh \
  && echo "/bin/sleep 10" >> run.sh \
- && echo "/usr/bin/tail -f /opt/takipi-server/log/tomcat/stdout -f /opt/takipi-server/log/tomcat/stderr -f -f /opt/takipi-server/log/tomcat/tomcat/catalina.log" >> run.sh \
+ && echo "/usr/bin/tail -f /opt/takipi-server/log/tomcat/stdout -f /opt/takipi-server/log/tomcat/stderr -f /opt/takipi-server/log/tomcat/tomcat/catalina.log" >> run.sh \
  && chmod +x run.sh
 
 # print version
