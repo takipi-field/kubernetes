@@ -64,6 +64,7 @@ VOLUME ["/opt/takipi-server/storage"]
 RUN echo "#!/bin/bash" > run.sh \
  && echo "cat /opt/takipi-server/VERSION" >> run.sh \
  && echo "sed -e \"s|\\\${TAKIPI_HOST_URL}|\${FRONTEND_URL}|g\" -i /opt/grafana-5.3.4/conf/custom.ini" >> run.sh \
+ && echo "sed -e \"s|\/\/\\\$apiHost:\\\$apiPort\/|\${FRONTEND_URL}\/|g\" -i /opt/grafana-5.3.4/conf/provisioning/dashboards/overops/*.json" >> run.sh \
  && echo "pushd grafana-5.3.4; nohup ./bin/grafana-server web &> grafana.log &" >> run.sh \
  && echo "popd" >> run.sh \
  && echo "/opt/takipi-server/bin/takipi-server.sh -u \${HOST_URL} --frontend-url \${FRONTEND_URL} --db-type \${DB_TYPE} --db-url \${DB_URL} --db-user \${DB_USER} --db-password \${DB_PASS} start" >> run.sh \
