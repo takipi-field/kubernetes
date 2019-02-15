@@ -44,24 +44,24 @@ spec:
           imagePullPolicy: Always
           resources:
             requests:
-              cpu: "100m"
-              memory: "1Gi"
+              cpu: "500m"
+              memory: "8Gi"
             limits:
-              cpu: "1000m"
-              memory: "2Gi"
+              cpu: "10000m"
+              memory: "32Gi"
           volumeMounts:
             - mountPath: /opt/private
               name: overops-server-private-volume
             - mountPath: /opt/takipi-server/storage
               name: overops-server-data-volume
-          livenessProbe:
-            httpGet:
-              path: /service/png
-              port: 8080
-            initialDelaySeconds: 120
-            periodSeconds: 10
-            timeoutSeconds: 1
-            failureThreshold: 3
+          # livenessProbe:
+          #   httpGet:
+          #     path: /service/png
+          #     port: 8080
+          #   initialDelaySeconds: 240
+          #   periodSeconds: 10
+          #   timeoutSeconds: 1
+          #   failureThreshold: 3
       volumes:
         - name: overops-server-private-volume
           secret:
