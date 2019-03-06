@@ -17,8 +17,8 @@ spec:
       value: "-agentpath:/takipi/lib/libTakipiAgent.so"
   volumeMounts:
     - mountPath: /takipi
-      name: takipi-volume
+      name: overops-agent
   volumes:
-    - name: takipi-volume
-      hostPath:
-        path: /local/path/to/agent/takipi/
+      - name: overops-agent
+        persistentVolumeClaim:
+          claimName: overops-agent
