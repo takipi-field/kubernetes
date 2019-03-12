@@ -27,7 +27,7 @@ spec:
             - name: DB_TYPE
               value: "mysql"
             - name: DB_SSL
-              value: "--db-ssl"
+              value: "--no-db-ssl"
             - name: DB_URL
               valueFrom:
                 secretKeyRef:

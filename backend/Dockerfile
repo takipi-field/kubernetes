@@ -13,7 +13,7 @@ ENV DB_TYPE mysql
 ENV DB_URL database_server_url
 ENV DB_USER database_user
 ENV DB_PASS database_password
-ENV DB_SSL --db-ssl
+ENV DB_SSL --no-db-ssl
 
 # install into the /opt directory
 WORKDIR /opt
