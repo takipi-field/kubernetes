@@ -26,6 +26,8 @@ spec:
               value: "https://overops.example.com"
             - name: DB_TYPE
               value: "mysql"
+            - name: DB_SSL
+              value: "--db-ssl"
             - name: DB_URL
               valueFrom:
                 secretKeyRef:
