@@ -19,7 +19,8 @@ Several environment variables are required:
 **DB_TYPE** *database type*  
 **DB_URL** *database server URL*  
 **DB_USER** *database username*  
-**DB_PASS** *database password*
+**DB_PASS** *database password*  
+**DB_SSL** *--no-db-ssl OR --db-ssl*
 
 In order to persist storage beyond the lifespan of the container, mount a volume to `/opt/takipi-server/storage`.
 

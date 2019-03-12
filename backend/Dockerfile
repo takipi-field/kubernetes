@@ -13,6 +13,7 @@ ENV DB_TYPE mysql
 ENV DB_URL database_server_url
 ENV DB_USER database_user
 ENV DB_PASS database_password
+ENV DB_SSL --db-ssl
 
 # install into the /opt directory
 WORKDIR /opt
@@ -39,7 +40,7 @@ VOLUME ["/opt/takipi-server/storage"]
 # create a run script
 RUN echo "#!/bin/bash" > run.sh \
  && echo "cat /opt/takipi-server/VERSION" >> run.sh \
- && echo "/opt/takipi-server/bin/takipi-server.sh -u \${HOST_URL} --frontend-url \${FRONTEND_URL} --db-type \${DB_TYPE} --db-url \${DB_URL} --db-user \${DB_USER} --db-password \${DB_PASS} start" >> run.sh \
+ && echo "/opt/takipi-server/bin/takipi-server.sh -u \${HOST_URL} --frontend-url \${FRONTEND_URL} --db-type \${DB_TYPE} --db-url \${DB_URL} --db-user \${DB_USER} --db-password \${DB_PASS} \${DB_SSL} start" >> run.sh \
  && echo "/bin/sleep 10" >> run.sh \
  && echo "/usr/bin/tail -f /opt/takipi-server/log/tomcat/stdout -f /opt/takipi-server/log/tomcat/stderr -f /opt/takipi-server/log/tomcat/tomcat/catalina.log" >> run.sh \
  && chmod +x run.sh
