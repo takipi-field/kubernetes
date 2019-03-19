@@ -7,10 +7,10 @@ RUN yum update -y \
 # environmental variables
 ENV JAVA_HOME /etc/alternatives/jre
 
-ENV HOST_URL overops-server
-ENV FRONTEND_URL https://overops.example.com
+ENV HOST_URL localhost:8080
+ENV FRONTEND_URL http://localhost:8080
 
-ENV DB_TYPE mysql
+ENV DB_TYPE h2
 ENV DB_URL database_server_url
 ENV DB_USER database_user
 ENV DB_PASS database_password
@@ -64,6 +64,10 @@ VOLUME ["/opt/takipi-server/storage"]
 # create a run script
 RUN echo "#!/bin/bash" > run.sh \
  && echo "cat /opt/takipi-server/VERSION" >> run.sh \
+ && echo "if [ -r /opt/takipi-server/storage/s3/data/onprem-sparktale/125/93/kd/KD.class ]" >> run.sh \
+ && echo "then" >> run.sh \
+ && echo "cp -p /opt/takipi-server/storage/s3/data/onprem-sparktale/125/93/kd/KD.class /opt/takipi-server/conf/tomcat/shared/." >> run.sh \
+ && echo "fi" >> run.sh \
  && echo "sed -e \"s|\\\${TAKIPI_HOST_URL}|\${FRONTEND_URL}|g\" -i /opt/grafana-5.3.4/conf/custom.ini" >> run.sh \
  && echo "sed -e \"s|\/\/\\\$apiHost:\\\$apiPort\/|\${FRONTEND_URL}\/|g\" -i /opt/grafana-5.3.4/conf/provisioning/dashboards/overops/*.json" >> run.sh \
  && echo "pushd grafana-5.3.4; nohup ./bin/grafana-server web &> grafana.log &" >> run.sh \

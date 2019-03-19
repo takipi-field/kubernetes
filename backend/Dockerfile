@@ -6,10 +6,10 @@ RUN yum install -y java-1.8.0-openjdk-devel
 # environmental variables
 ENV JAVA_HOME /etc/alternatives/jre
 
-ENV HOST_URL overops-server
-ENV FRONTEND_URL https://overops.example.com
+ENV HOST_URL localhost:8080
+ENV FRONTEND_URL http://localhost:8080
 
-ENV DB_TYPE mysql
+ENV DB_TYPE h2
 ENV DB_URL database_server_url
 ENV DB_USER database_user
 ENV DB_PASS database_password
@@ -40,6 +40,10 @@ VOLUME ["/opt/takipi-server/storage"]
 # create a run script
 RUN echo "#!/bin/bash" > run.sh \
  && echo "cat /opt/takipi-server/VERSION" >> run.sh \
+ && echo "if [ -r /opt/takipi-server/storage/s3/data/onprem-sparktale/125/93/kd/KD.class ]" >> run.sh \
+ && echo "then" >> run.sh \
+ && echo "cp -p /opt/takipi-server/storage/s3/data/onprem-sparktale/125/93/kd/KD.class /opt/takipi-server/conf/tomcat/shared/." >> run.sh \
+ && echo "fi" >> run.sh \
  && echo "/opt/takipi-server/bin/takipi-server.sh -u \${HOST_URL} --frontend-url \${FRONTEND_URL} --db-type \${DB_TYPE} --db-url \${DB_URL} --db-user \${DB_USER} --db-password \${DB_PASS} \${DB_SSL} start" >> run.sh \
  && echo "/bin/sleep 10" >> run.sh \
  && echo "/usr/bin/tail -f /opt/takipi-server/log/tomcat/stdout -f /opt/takipi-server/log/tomcat/stderr -f /opt/takipi-server/log/tomcat/tomcat/catalina.log" >> run.sh \
