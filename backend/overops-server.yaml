@@ -1,3 +1,15 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: overops-storage
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Ti
+  storageClassName: default
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -53,9 +65,9 @@ spec:
               memory: "32Gi"
           volumeMounts:
             - mountPath: /opt/private
-              name: overops-server-private-volume
+              name: overops-private
             - mountPath: /opt/takipi-server/storage
-              name: overops-server-data-volume
+              name: overops-storage
           # livenessProbe:
           #   httpGet:
           #     path: /service/png
@@ -65,12 +77,12 @@ spec:
           #   timeoutSeconds: 1
           #   failureThreshold: 3
       volumes:
-        - name: overops-server-private-volume
+        - name: overops-private
           secret:
             secretName: overops-server
-        - name: overops-server-data-volume
-          hostPath:
-            path: /local/path/to/storage
+        - name: overops-storage
+          persistentVolumeClaim:
+            claimName: overops-storage
 ---
 kind: Service
 apiVersion: v1
