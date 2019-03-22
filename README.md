@@ -74,7 +74,7 @@ Basic Docker commands can be found on the [Docker Cheat Sheet](https://www.docke
 - run a container interactively `docker run -it my-container /bin/bash`
 - list containers `docker container ls`
 - list images `docker image ls`
-- remove all containers `docker container rm $(docker container ps -aq)`
+- remove all containers `docker container rm $(docker container ls -aq)`
 - remove all images `docker image rm $(docker image ls -q)`
 
 ## Kubernetes Commands Cheat Sheet
