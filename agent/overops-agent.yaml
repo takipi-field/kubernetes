@@ -1,7 +1,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: overops-agent-4.31.4
+  name: overops-agent-4.33.0
 spec:
   accessModes:
     - ReadWriteMany
@@ -18,19 +18,19 @@ spec:
   template:
     spec:
       containers:
-      - name: overops-agent-4.31.4
+      - name: overops-agent-4.33.0
         image: busybox
         args:
         - /bin/sh
         - -c
         - >
-          wget -q https://s3.amazonaws.com/app-takipi-com/deploy/linux/takipi-agent-4.31.4.tar.gz -O - | tar -xvzf -
+          wget -q https://s3.amazonaws.com/app-takipi-com/deploy/linux/takipi-agent-4.33.0.tar.gz -O - | tar -xvzf -
         volumeMounts:
         - name: overops-agent
           mountPath: /takipi
       volumes:
       - name: overops-agent
         persistentVolumeClaim:
-          claimName: overops-agent-4.31.4
+          claimName: overops-agent-4.33.0
       restartPolicy: OnFailure
   backoffLimit: 3
