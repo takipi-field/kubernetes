@@ -21,6 +21,7 @@ spec:
       - name: overops-agent
         mountPath: /takipi
   containers:
+    # example only - replace with your container to be monitored
     - name: event-generator
       image: 432746435694.dkr.ecr.us-east-1.amazonaws.com/event-generator:no-flags
       imagePullPolicy: Always
@@ -37,6 +38,7 @@ spec:
       - name: TAKIPI_COLLECTOR_PORT
         value: "6060"
       - name: JAVA_TOOL_OPTIONS
+        # example only - update application.name and deployment.name for your app
         value: "-agentpath:/takipi/lib/libTakipiAgent.so=takipi.application.name=EventGeneratorSidecar,takipi.deployment.name=v2.1.3.sidecar"
       volumeMounts:
       - name: overops-agent
