@@ -14,6 +14,9 @@ WORKDIR /opt
 # NOTE for Alpine, use: https://s3.amazonaws.com/sam.sparktale/samv2/snapshots/native/native.0.2449/takipi-alpine-agent-native.0.2449.tar.gz
 RUN curl -sL https://s3.amazonaws.com/app-takipi-com/deploy/linux/takipi-agent-latest.tar.gz | tar -xvzf -
 
+# print version
+RUN cat takipi/VERSION
+
 # share /takipi between containers in a pod
 VOLUME ["/takipi/"]
 
