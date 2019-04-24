@@ -45,7 +45,7 @@ spec:
       takipi: inject-agent
   env:
     - name: TAKIPI_COLLECTOR_HOST
-      value: "jaqen-collector-service"
+      value: "overops-collector-service"
     - name: TAKIPI_COLLECTOR_PORT
       value: "6060"
     - name: TAKIPI_RESOURCES_DIR
