@@ -8,17 +8,17 @@ spec:
   resources:
     requests:
       storage: 100Mi
-  storageClassName: default
+  storageClassName: aws-efs
 ---
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: overops-agent
+  name: overops-agent-4.36.0
 spec:
   template:
     spec:
       containers:
-      - name: overops-agent-4.36.0
+      - name: overops-agent
         image: busybox
         args:
         - /bin/sh
@@ -45,7 +45,7 @@ spec:
       takipi: inject-agent
   env:
     - name: TAKIPI_COLLECTOR_HOST
-      value: "overops-collector-service"
+      value: "jaqen-collector-service"
     - name: TAKIPI_COLLECTOR_PORT
       value: "6060"
     - name: TAKIPI_RESOURCES_DIR
