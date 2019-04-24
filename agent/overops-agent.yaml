@@ -13,7 +13,7 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: overops-agent
+  name: overops-agent-4.36.0
 spec:
   template:
     spec:
