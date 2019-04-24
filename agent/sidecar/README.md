@@ -1,6 +1,6 @@
 # Sidecar Agent
 
-This container contains a copy of the Agent in it's `/takipi` directory. At run time, it copies the contents of this directory into the `/shared-data` directory. After copying, it enters an infinite loop to keep the container running in the cluster.
+This container contains a copy of the Agent in it's `/opt/takipi` directory. At run time, it copies the contents of this directory into the `/takipi` directory. After copying it stops running.
 
 *Before building the sidecar, you'll need to [install Docker and Kubernetes](../../README.md).*
 
