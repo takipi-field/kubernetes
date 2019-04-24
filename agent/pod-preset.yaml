@@ -21,4 +21,4 @@ spec:
   volumes:
       - name: overops-agent
         persistentVolumeClaim:
-          claimName: overops-agent-4.33.0
+          claimName: overops-agent-4.36.0

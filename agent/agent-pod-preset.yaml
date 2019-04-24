@@ -34,3 +34,28 @@ spec:
           claimName: overops-agent-4.36.0
       restartPolicy: OnFailure
   backoffLimit: 3
+---
+apiVersion: settings.k8s.io/v1alpha1
+kind: PodPreset
+metadata:
+  name: overops-agent-pod-preset
+spec:
+  selector:
+    matchLabels:
+      takipi: inject-agent
+  env:
+    - name: TAKIPI_COLLECTOR_HOST
+      value: "overops-collector-service"
+    - name: TAKIPI_COLLECTOR_PORT
+      value: "6060"
+    - name: TAKIPI_RESOURCES_DIR
+      value: "/tmp"
+    - name: JAVA_TOOL_OPTIONS
+      value: "-agentpath:/takipi/lib/libTakipiAgent.so"
+  volumeMounts:
+    - mountPath: /takipi
+      name: overops-agent
+  volumes:
+      - name: overops-agent
+        persistentVolumeClaim:
+          claimName: overops-agent-4.36.0
