@@ -1,7 +1,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: overops-agent-4.36.0
+  name: overops-agent-4.37.0
 spec:
   accessModes:
     - ReadWriteMany
@@ -13,7 +13,7 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: overops-agent-4.36.0
+  name: overops-agent-4.37.0
 spec:
   template:
     spec:
@@ -24,21 +24,21 @@ spec:
         - /bin/sh
         - -c
         - >
-          wget -q https://s3.amazonaws.com/app-takipi-com/deploy/linux/takipi-agent-4.36.0.tar.gz -O - | tar -xvzf -
+          wget -q https://s3.amazonaws.com/app-takipi-com/deploy/linux/takipi-agent-4.37.0.tar.gz -O - | tar -xvzf -
         volumeMounts:
         - name: overops-agent
           mountPath: /takipi
       volumes:
       - name: overops-agent
         persistentVolumeClaim:
-          claimName: overops-agent-4.36.0
+          claimName: overops-agent-4.37.0
       restartPolicy: OnFailure
   backoffLimit: 3
 ---
 apiVersion: settings.k8s.io/v1alpha1
 kind: PodPreset
 metadata:
-  name: overops-agent-pod-preset
+  name: overops-agent-4.37.0
 spec:
   selector:
     matchLabels:
@@ -58,4 +58,4 @@ spec:
   volumes:
       - name: overops-agent
         persistentVolumeClaim:
-          claimName: overops-agent-4.36.0
+          claimName: overops-agent-4.37.0
