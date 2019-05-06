@@ -40,7 +40,7 @@ minikube version: v0.30.0
 ```
 
 ## Start your cluster
-To start the cluster, simply run `minukube start`. Later, we'll be using [Pod Presets](https://kubernetes.io/docs/concepts/workloads/pods/podpreset/), which requires additional cluster configuration. To enable Pod Presets, start your cluster with this command:
+To start the cluster, simply run `minikube start`. Later, we'll be using [Pod Presets](https://kubernetes.io/docs/concepts/workloads/pods/podpreset/), which requires additional cluster configuration. To enable Pod Presets, start your cluster with this command:
 
 ```console
 $ minikube start --extra-config=apiserver.runtime-config=api/all=true --extra-config=apiserver.admission-control="NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota,PodPreset"
