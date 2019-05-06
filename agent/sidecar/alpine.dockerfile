@@ -1,4 +1,7 @@
-FROM centos:6
+FROM alpine:3.9
+
+# install dependencies
+RUN apk add curl
 
 # set default environmental variables
 ENV TAKIPI_COLLECTOR_HOST=collector
@@ -10,9 +13,8 @@ ENV JAVA_TOOL_OPTIONS=-agentpath:/takipi/lib/libTakipiAgent.so
 # set working directory
 WORKDIR /opt
 
-# download and install the agent - extracts into the `takipi` folder.
-# NOTE for Alpine, use: overops/agent-sidecar:alpine-latest
-RUN curl -sL https://s3.amazonaws.com/app-takipi-com/deploy/linux/takipi-agent-latest.tar.gz | tar -xvzf -
+# download and installs the Alpine agent - extracts into the `takipi` folder.
+RUN curl -sL https://s3.amazonaws.com/app-takipi-com/deploy/alpine/takipi-agent-latest.tar.gz | tar -xvzf -
 
 # print version
 RUN cat takipi/VERSION
@@ -21,7 +23,7 @@ RUN cat takipi/VERSION
 VOLUME ["/takipi/"]
 
 # create a run script to copy /opt/takipi/ (latest agent) to /takipi/ (shared)
-RUN echo "#!/bin/bash" > run.sh \
+RUN echo "#!/bin/sh" > run.sh \
  && echo "cat /opt/takipi/VERSION" >> run.sh \
  && echo "cp -a /opt/takipi/. /takipi/" >> run.sh \
  && chmod +x run.sh
