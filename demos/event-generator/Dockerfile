@@ -9,5 +9,4 @@ WORKDIR /opt/demo
 # use the event generator demo app
 RUN git clone https://github.com/takipi-field/overops-event-generator . ; ./mvnw clean package -DskipTests
 
-# CMD ["java", "-Dtakipi.application.name=EventGenerator", "-Dtakipi.deployment.name=v2.1.3", "-jar", "/opt/demo/target/overops-event-generator-2.1.3.jar"]
 CMD ["java", "-jar", "/opt/demo/target/overops-event-generator-2.1.3.jar"]
