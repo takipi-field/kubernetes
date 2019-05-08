@@ -24,9 +24,11 @@ VOLUME ["/takipi/"]
 RUN echo "#!/bin/bash" > run.sh \
  && echo "cat /opt/takipi/VERSION" >> run.sh \
  && echo "cp -a /opt/takipi/. /takipi/" >> run.sh \
- && echo "sleep 60" >> run.sh \
- && echo "ls /takipi/log/agents" >> run.sh \
- && echo "tail -F /takipi/log/agents/*.log -F /takipi/log/agents/bugtale_agent.startup" >> run.sh \
+ && echo "while [ ! -f /takipi/log/agents/*.log ] && [ ! -f /takipi/log/agents/bugtail_agent.startup ]; do" >> run.sh \
+ && echo "sleep 2" >> run.sh \
+ && echo "echo 'waiting for jvm startup'" >> run.sh \
+ && echo "done" >> run.sh \
+ && echo "tail -f /takipi/log/agents/*.log -f /takipi/log/agents/bugtale_agent.startup" >> run.sh \
  && chmod +x run.sh
 
 CMD ["./run.sh"]
