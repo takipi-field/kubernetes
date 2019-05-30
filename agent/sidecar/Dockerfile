@@ -24,6 +24,7 @@ VOLUME ["/takipi/"]
 RUN echo "#!/bin/bash" > run.sh \
  && echo "cat /opt/takipi/VERSION" >> run.sh \
  && echo "cp -a /opt/takipi/. /takipi/" >> run.sh \
+ && echo "chmod -R 777 /takipi" >> run.sh \
  && chmod +x run.sh
 
 CMD ["./run.sh"]
