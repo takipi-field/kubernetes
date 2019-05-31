@@ -3,7 +3,7 @@ FROM openjdk:8-jre-slim
 # set default environmental variables
 ENV TAKIPI_COLLECTOR_HOST=collector
 ENV TAKIPI_COLLECTOR_PORT=6060
-ENV JAVA_TOOL_OPTIONS=-agentpath:/lib/libTakipiAgent.so
+ENV JAVA_TOOL_OPTIONS=-agentpath:/takipi/lib/libTakipiAgent.so
 # to include application and deployment name:
 # ENV JAVA_TOOL_OPTIONS=-agentpath:/takipi/lib/libTakipiAgent.so=takipi.application.name=<app name here>,takipi.deployment.name=<app version here>
 
