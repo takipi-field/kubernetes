@@ -24,7 +24,7 @@ spec:
         - /bin/sh
         - -c
         - >
-          wget -q https://s3.amazonaws.com/app-takipi-com/deploy/linux/takipi-agent-4.37.0.tar.gz -O - | tar -xvzf -
+          wget -q https://s3.amazonaws.com/app-takipi-com/deploy/linux/takipi-agent-4.37.0.tar.gz -O - | tar xvzf - ; chmod -R 777 /takipi
         volumeMounts:
         - name: overops-agent
           mountPath: /takipi
