@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: overops-collector-deployment
+  labels:
+    app: overops-collector
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: overops-collector
+  template:
+    metadata:
+      labels:
+        app: overops-collector
+    spec:
+      containers:
+        - name: overops-collector
+          image: overops/collector:latest
+          ports:
+            - containerPort: 6060
+          env:
+            - name: TAKIPI_BASE_URL
+              value: "https://backend.overops.com"
+            - name: TAKIPI_LISTEN_PORT
+              value: "6060"
+            - name: TAKIPI_SERVER_NAME
+              value: "k8s-cluster"
+            - name: TAKIPI_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: overops-collector
+                  key: secret-key
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "1Gi"
+            limits:
+              cpu: "1000m"
+              memory: "2Gi"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: overops-collector-service
+spec:
+  selector:
+    app: overops-collector
+  ports:
+    - protocol: TCP
+      port: 6060
+      targetPort: 6060
