@@ -111,28 +111,6 @@ To remove:
 kubectl delete -f overops-server.yaml
 ```
 
-## Reliability Dashboards
-
-To enable Reliability Dashboards, uncomment Grafana settings in [my.server.properties](private/my.server.properties).
-
-To include Grafana bundled with the OverOps backend, use the [`oo-grafana.dockerfile`](oo-grafana.dockerfile)
-
-```console
-docker build . -f oo-grafana.dockerfile -t overops-server:grafana
-```
-
-This image is on Docker Hub: [overops/server:grafana-latest](https://hub.docker.com/r/overops/server/tags)
-
-```console
-docker run -p 8080:8080 \
---mount type=bind,source="$(pwd)"/private,target=/opt/private \
---mount type=bind,source="$(pwd)"/storage,target=/opt/takipi-server/storage \
--e HOST_URL=localhost:8080 \
--e FRONTEND_URL=http://localhost:8080 \
--e DB_TYPE=h2 \
-overops/server:grafana-latest
-```
-
 ## Next Steps
 
 - [Create a Pod Preset for the Agent](../agent)
