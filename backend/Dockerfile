@@ -1,4 +1,7 @@
-FROM centos:6
+FROM centos:7
+
+# update
+RUN yum -y update
 
 # install OpenJDK 8
 RUN yum install -y java-1.8.0-openjdk-devel
