@@ -1,0 +1,349 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://getbootstrap.com/docs/4.5/examples/dashboard/dashboard.css" crossorigin="anonymous">
+
+    <style>
+      .navbar-brand {
+        background-color: unset;
+        box-shadow: unset;
+      }
+      .modal {
+        display: block;
+      }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
+    <title>OverOps Pod Patcher</title>
+  </head>
+
+  <body>
+    <div x-data="model()" x-init="init()">
+      <nav class="navbar navbar-dark sticky-top bg-dark p-0">
+        <a class="navbar-brand col-3 mr-0 px-3" href="">OverOps Pod Patcher</a>
+        <a
+          class="btn btn-sm btn-primary mr-3"
+          :class="{ 'disabled': numChecked < 1 }"
+          role="button"
+          href="#"
+          @click.prevent="
+            getPatch();
+            isOpen = true;
+            $nextTick(() => $refs.modal.focus());
+          ">
+          <span class="badge badge-light mr-1" x-text="numChecked"></span>
+          Review changes
+        </a>
+      </nav>
+
+      <div class="container-fluid">
+        <div class="row">
+          <nav id="sidebarMenu" class="col-3 d-block bg-light sidebar">
+            <div class="sidebar-sticky pt-3">
+
+              <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <span>Namespace</span>
+              </h6>
+
+              <ul class="nav flex-column">
+                <template x-if="namespaces.length > 0" x-for="ns in namespaces">
+                  <li class="nav-item" :key="ns.metadata.name">
+                    <a
+                      href="#"
+                      class="nav-link"
+                      :class="{ 'active': namespace === ns.metadata.name }"
+                      @click.prevent="setNamespace(ns.metadata.name)"
+                      @keydown.escape="isOpen = false"
+                      x-text="ns.metadata.name"
+                    ></a>
+                  </li>
+                </template>
+              </ul>
+
+            </div>
+          </nav>
+
+          <main role="main" class="col-9 ml-auto px-4">
+            <div class="pt-3 pb-2 mb-3">
+              <h2>Deployments</h2>
+            </div>
+
+            <template x-if="deployments.length > 0">
+              <div>
+                <template x-for="(dep, d) in deployments" :key="d">
+                  <div class="card mb-3">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                      <div class="form-check user-select-none">
+                        <label class="form-check-label mb-2">
+                          <input class="form-check-input" type="checkbox" x-model="dep.isChecked" @click.prevent="toggleDeployment(d)">
+                          <span class="font-weight-bold" x-text="dep.metadata.name"></span> &ndash;
+                          <span class="font-italic" x-text="dep.metadata.labels.app"></span>
+                        </label>
+                      </div>
+                      <template x-if="dep.metadata.annotations">
+                        <span
+                          class="font-weight-light"
+                          x-text="`rev ${dep.metadata.annotations['deployment.kubernetes.io/revision']}`"
+                        >
+                        </span>
+                      </template>
+                    </div>
+                    <div class="card-body">
+                      <template x-if="dep.spec.template.spec.initContainers">
+                        <div>
+                          <template x-for="(initContainer, ic) in dep.spec.template.spec.initContainers" :key="ic">
+                            <div>
+                              <span x-text="initContainer.name"></span> &ndash;
+                              <span class="font-weight-light" x-text="initContainer.image"></span>
+                              <pre x-show="initContainer.volumeMounts" x-text="JSON.stringify(initContainer.volumeMounts, null, 2)"></pre>
+                            </div>
+                          </template>
+                        </div>
+                      </template>
+                      <template x-for="(container, c) in dep.spec.template.spec.containers" :key="c">
+                        <div>
+                          <div class="form-check card-text mb-1 user-select-none">
+                            <label class="form-check-label">
+                              <input class="form-check-input" type="checkbox" x-model="container.isChecked" @click.prevent="toggleContainer(d,c)">
+                              <span x-text="container.name"></span> &ndash;
+                              <span class="font-weight-light" x-text="container.image"></span>
+                            </label>
+                            <div class="form-group row mt-3" x-show="container.isChecked">
+                              <label
+                                class="col-3 col-form-label px-0"
+                                x-bind:for="`app-name-${d}-${c}`"
+                              >
+                                Application Name
+                              </label>
+                              <div class="col-6 px-0">
+                                <input
+                                  type="text"
+                                  class="form-control form-control-sm"
+                                  x-model="container.TAKIPI_APPLICATION_NAME"
+                                  x-bind:id="`app-name-${d}-${c}`"
+                                >
+                              </div>
+                            </div>
+                            <div class="form-group row mt-3" x-show="container.isChecked">
+                              <label
+                                class="col-3 col-form-label px-0"
+                                x-bind:for="`app-name-${d}-${c}`"
+                              >
+                                Deployment Name
+                              </label>
+                              <div class="col-6 px-0">
+                                <input
+                                  type="text"
+                                  class="form-control form-control-sm"
+                                  x-model="container.TAKIPI_DEPLOYMENT_NAME"
+                                  x-bind:id="`dep-name-${d}-${c}`"
+                                >
+                              </div>
+                            </div>
+                          </div>
+                          <pre x-show="container.env" x-text="JSON.stringify(container.env, null, 2)"></pre>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </template>
+
+          </main>
+
+          <div
+            class="modal fade show"
+            x-show.transition.in.duration.500ms="isOpen"
+            tabindex="-1"
+            role="dialog"
+            @keydown.escape="isOpen = false"
+            x-ref="modal"
+          >
+            <div class="modal-dialog modal-dialog-scrollable" @click.away="isOpen = false">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Review changes</h5>
+                  <button type="button" class="close" @click="isOpen = false">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <pre x-text="logger"></pre>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-link mr-auto" @click="isOpen = false">Cancel</button>
+                  <button type="button" class="btn btn-primary" @click="applyPatch()">Apply changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div> <!-- /.row -->
+      </div> <!-- /.container-fluid -->
+      <div class="modal-backdrop fade show" x-show="isOpen"></div>
+    </div> <!-- /. alpine data -->
+    <script>
+      function model() {
+        const apiPrefix = 'api/v1/';
+        return {
+          namespaces: [],
+          namespace: 'default',
+          deployments: [],
+          numContainers: 0,
+          numChecked: 0,
+          isOpen: false,
+          logger: '',
+          patch: [],
+
+          init() {
+            fetch(apiPrefix + 'namespaces')
+              .then(response => response.json())
+              .then(data => this.namespaces = data.body.items);
+
+            this.getDeployments();
+          },
+
+          setNamespace(namespace) {
+            this.namespace = namespace;
+            this.getDeployments();
+          },
+
+          getDeployments() {
+            fetch(`${apiPrefix}namespaces/${this.namespace}/deployments`)
+              .then(response => response.json())
+              .then(data => {
+                console.log('deployments: %o', data);
+                this.deployments = data.body.items;
+                this.getNumContainers();
+              });
+          },
+
+          getNumContainers() {
+            let numContainers = 0;
+            this.deployments.forEach(deployment => {
+              numContainers += deployment.spec.template.spec.containers.length;
+            });
+            this.numContainers = numContainers;
+            this.numChecked = 0;
+          },
+
+          getNumChecked() {
+            let numChecked = 0;
+            this.deployments.forEach(deployment => {
+              deployment.spec.template.spec.containers.forEach(container => {
+                if (container.isChecked) numChecked++;
+              });
+            });
+            this.numChecked = numChecked;
+          },
+
+          toggleDeployment(d) {
+            this.deployments[d].isChecked = !this.deployments[d].isChecked;
+
+            this.deployments[d].spec.template.spec.containers.forEach(container => {
+              container.isChecked = this.deployments[d].isChecked;
+            });
+
+            this.getNumChecked();
+          },
+
+          toggleContainer(d,c) {
+            this.deployments[d].spec.template.spec.containers[c].isChecked = 
+              !this.deployments[d].spec.template.spec.containers[c].isChecked;
+
+            this.numChecked += (this.deployments[d].spec.template.spec.containers[c].isChecked ? 1 : -1);
+
+            let allContainersChecked = true;
+
+            this.deployments[d].spec.template.spec.containers.forEach(container => {
+              allContainersChecked = allContainersChecked && container.isChecked;
+            });
+
+            this.deployments[d].isChecked = allContainersChecked;
+          },
+
+          getPatch() {
+            let deployments = [];
+
+            this.deployments.forEach(deployment => {
+              let dep = {name: deployment.metadata.name, containers: []};
+              deployment.spec.template.spec.containers.forEach(container => {
+                if (container.isChecked) {
+                  let con = {
+                    name: container.name,
+                    env: [
+                      {
+                        name: 'TAKIPI_COLLECTOR_HOST',
+                        value:'overops-collector-service'
+                      },
+                      {
+                        name: 'TAKIPI_COLLECTOR_PORT',
+                        value:'6060'
+                      }
+                    ]
+                  };
+
+                  if (container.TAKIPI_APPLICATION_NAME && container.TAKIPI_APPLICATION_NAME.trim() !== "") {
+                    con.env.push({
+                      name: 'TAKIPI_APPLICATION_NAME',
+                      value: container.TAKIPI_APPLICATION_NAME.trim()
+                    });
+                  }
+
+                  if (container.TAKIPI_DEPLOYMENT_NAME && container.TAKIPI_DEPLOYMENT_NAME.trim() !== "") {
+                    con.env.push({
+                      name: 'TAKIPI_DEPLOYMENT_NAME',
+                      value: container.TAKIPI_DEPLOYMENT_NAME.trim()
+                    });
+                  }
+
+                  dep.containers.push(con);
+                }
+              });
+
+              if (dep.containers.length > 0) {
+                deployments.push(dep);
+              }
+
+            });
+
+            this.patch = deployments;
+            this.logger = JSON.stringify(this.patch, null, 2);
+          },
+
+          applyPatch() {
+            let patches = [];
+            this.patch.forEach(patch => {
+              patches.push(
+                fetch(`${apiPrefix}namespaces/${this.namespace}/deployments/${patch.name}`,
+                  {
+                    method: 'PATCH',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({containers: patch.containers})
+                  }
+                )
+              );
+            });
+
+            Promise.all(patches)
+              .then(() => {
+                this.isOpen = false;
+                this.getDeployments();
+              });
+          }
+
+        }
+      }
+    </script>
+
+  </body>
+</html>
