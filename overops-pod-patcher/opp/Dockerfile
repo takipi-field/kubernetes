@@ -10,7 +10,8 @@ COPY package.json .
 RUN npm install
 
 COPY index.js .
-COPY index.html .
+RUN mkdir resources
+COPY resources/. resources/.
 
 EXPOSE 3000
 

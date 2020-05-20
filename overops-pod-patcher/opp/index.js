@@ -28,13 +28,6 @@ app.use(async (ctx, next) => {
   ctx.set('X-Response-Time', `${ms}ms`);
 });
 
-router.get('/', async (ctx, next) => {
-  await next();
-
-  ctx.type = 'html';
-  ctx.body = fs.createReadStream(__dirname + '/index.html');
-});
-
 router.get(apiPrefix + 'namespaces', async (ctx, next) => {
   await next();
   await client.loadSpec();
@@ -112,6 +105,7 @@ router.patch(apiPrefix + 'namespaces/:namespace/deployments/:deployment', async 
 app
   .use(bodyParser())
   .use(router.routes())
-  .use(router.allowedMethods());
+  .use(router.allowedMethods())
+  .use(require('koa-static')(__dirname + '/resources'));
 
 app.listen(3000);

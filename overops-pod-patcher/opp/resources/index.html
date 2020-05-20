@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <link rel="shortcut icon" type="image/png" sizes="48x48" href="./overops-favicon-48x48.png"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="https://getbootstrap.com/docs/4.5/examples/dashboard/dashboard.css" crossorigin="anonymous">
 
@@ -71,7 +71,7 @@
 
           <main role="main" class="col-9 ml-auto px-4">
             <div class="pt-3 pb-2 mb-3">
-              <h2>Deployments</h2>
+              <h3>Deployments</h3>
             </div>
 
             <template x-if="deployments.length > 0">
@@ -86,6 +86,16 @@
                           <span class="font-italic" x-text="dep.metadata.labels.app"></span>
                         </label>
                       </div>
+                      <template x-if="dep.spec.template.spec.initContainers">
+                        <div class="ml-auto mr-2">
+                          <template x-for="(initContainer, ic) in dep.spec.template.spec.initContainers" :key="ic">
+                            <div x-show="initContainer.image.startsWith('overops/agent-sidecar')">
+                              <!-- <span x-text="initContainer.name"></span>: -->
+                              <span class="badge badge-dark" x-text="initContainer.image"></span>
+                            </div>
+                          </template>
+                        </div>
+                      </template>
                       <template x-if="dep.metadata.annotations">
                         <span
                           class="font-weight-light"
@@ -95,17 +105,6 @@
                       </template>
                     </div>
                     <div class="card-body">
-                      <template x-if="dep.spec.template.spec.initContainers">
-                        <div>
-                          <template x-for="(initContainer, ic) in dep.spec.template.spec.initContainers" :key="ic">
-                            <div>
-                              <span x-text="initContainer.name"></span> &ndash;
-                              <span class="font-weight-light" x-text="initContainer.image"></span>
-                              <pre x-show="initContainer.volumeMounts" x-text="JSON.stringify(initContainer.volumeMounts, null, 2)"></pre>
-                            </div>
-                          </template>
-                        </div>
-                      </template>
                       <template x-for="(container, c) in dep.spec.template.spec.containers" :key="c">
                         <div>
                           <div class="form-check card-text mb-1 user-select-none">
@@ -114,6 +113,28 @@
                               <span x-text="container.name"></span> &ndash;
                               <span class="font-weight-light" x-text="container.image"></span>
                             </label>
+
+                            <span
+                              class="badge badge-primary"
+                              x-show="container.ENV_TAKIPI_APPLICATION_NAME"
+                              x-text="`app: ${container.ENV_TAKIPI_APPLICATION_NAME}`"
+                            ></span>
+                            <span
+                              class="badge badge-primary"
+                              x-show="container.ENV_TAKIPI_DEPLOYMENT_NAME"
+                              x-text="`dep: ${container.ENV_TAKIPI_DEPLOYMENT_NAME}`"
+                            ></span>
+                            <span
+                              class="badge badge-info"
+                              x-show="container.ENV_TAKIPI_COLLECTOR_HOST"
+                              x-html="`<span class='text-monospace'>${container.ENV_TAKIPI_COLLECTOR_HOST}:${container.ENV_TAKIPI_COLLECTOR_PORT}</span>`"
+                            ></span>
+                            <!-- <template x-for="env in container.env">
+                              <span class="badge badge-info" x-show="env.name.startsWith('TAKIPI_').endsWith('_NAME')" x-text="`${env.name}: ${env.value}`"></span>
+                            </template> -->
+
+                            <!-- <pre x-show="container.env" x-text="JSON.stringify(container.env, null, 2)"></pre> -->
+
                             <div class="form-group row mt-3" x-show="container.isChecked">
                               <label
                                 class="col-3 col-form-label px-0"
@@ -147,13 +168,16 @@
                               </div>
                             </div>
                           </div>
-                          <pre x-show="container.env" x-text="JSON.stringify(container.env, null, 2)"></pre>
                         </div>
                       </template>
                     </div>
                   </div>
                 </template>
               </div>
+            </template>
+
+            <template x-if="deployments.length === 0">
+              <p>No deployments</p>
             </template>
 
           </main>
@@ -219,9 +243,9 @@
             fetch(`${apiPrefix}namespaces/${this.namespace}/deployments`)
               .then(response => response.json())
               .then(data => {
-                console.log('deployments: %o', data);
                 this.deployments = data.body.items;
                 this.getNumContainers();
+                this.getTakipiEnvVars();
               });
           },
 
@@ -242,6 +266,29 @@
               });
             });
             this.numChecked = numChecked;
+          },
+
+          getTakipiEnvVars() {
+            this.deployments.forEach(deployment => {
+              deployment.spec.template.spec.containers.forEach(container => {
+                if (container.env) {
+                  container.env.forEach(env => {
+                    switch(env.name) {
+                      case 'TAKIPI_APPLICATION_NAME':
+                        container.ENV_TAKIPI_APPLICATION_NAME = env.value;
+                        container.TAKIPI_APPLICATION_NAME = env.value;
+                        break;
+                      case 'TAKIPI_DEPLOYMENT_NAME':
+                        container.ENV_TAKIPI_DEPLOYMENT_NAME = env.value;
+                        container.TAKIPI_DEPLOYMENT_NAME = env.value;
+                        break;
+                      case 'TAKIPI_COLLECTOR_HOST': container.ENV_TAKIPI_COLLECTOR_HOST = env.value; break;
+                      case 'TAKIPI_COLLECTOR_PORT': container.ENV_TAKIPI_COLLECTOR_PORT = env.value; break;
+                    }
+                  });
+                }
+              });
+            });
           },
 
           toggleDeployment(d) {
