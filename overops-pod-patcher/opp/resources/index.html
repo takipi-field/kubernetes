@@ -27,19 +27,27 @@
     <div x-data="model()" x-init="init()">
       <nav class="navbar navbar-dark sticky-top bg-dark p-0">
         <a class="navbar-brand col-3 mr-0 px-3" href="">OverOps Pod Patcher</a>
-        <a
-          class="btn btn-sm btn-primary mr-3"
-          :class="{ 'disabled': numChecked < 1 }"
-          role="button"
-          href="#"
+        <button
+          class="btn btn-sm btn-outline-light ml-auto mr-2"
+          type="button"
+          @click.prevent="
+            isConfigOpen = true;
+            $nextTick(() => $refs.modalConfig.focus());
+          ">
+          Configure agent
+        </button>
+        <button
+          class="btn btn-sm btn-light mr-3"
+          x-bind:disabled="numChecked < 1"
+          type="button"
           @click.prevent="
             getPatch();
-            isOpen = true;
-            $nextTick(() => $refs.modal.focus());
+            isReviewOpen = true;
+            $nextTick(() => $refs.modalReview.focus());
           ">
-          <span class="badge badge-light mr-1" x-text="numChecked"></span>
-          Review changes
-        </a>
+          <span class="badge badge-dark mr-1" x-text="numChecked"></span>
+          Review patch
+        </button>
       </nav>
 
       <div class="container-fluid">
@@ -59,7 +67,7 @@
                       class="nav-link"
                       :class="{ 'active': namespace === ns.metadata.name }"
                       @click.prevent="setNamespace(ns.metadata.name)"
-                      @keydown.escape="isOpen = false"
+                      @keydown.escape="isReviewOpen = false"
                       x-text="ns.metadata.name"
                     ></a>
                   </li>
@@ -80,7 +88,7 @@
                   <div class="card mb-3">
                     <div class="card-header d-flex justify-content-between align-items-center">
                       <div class="form-check user-select-none">
-                        <label class="form-check-label mb-2">
+                        <label class="form-check-label">
                           <input class="form-check-input" type="checkbox" x-model="dep.isChecked" @click.prevent="toggleDeployment(d)">
                           <span class="font-weight-bold" x-text="dep.metadata.name"></span> &ndash;
                           <span class="font-italic" x-text="dep.metadata.labels.app"></span>
@@ -129,45 +137,24 @@
                               x-show="container.ENV_TAKIPI_COLLECTOR_HOST"
                               x-html="`<span class='text-monospace'>${container.ENV_TAKIPI_COLLECTOR_HOST}:${container.ENV_TAKIPI_COLLECTOR_PORT}</span>`"
                             ></span>
-                            <!-- <template x-for="env in container.env">
-                              <span class="badge badge-info" x-show="env.name.startsWith('TAKIPI_').endsWith('_NAME')" x-text="`${env.name}: ${env.value}`"></span>
-                            </template> -->
+                          </div>
 
-                            <!-- <pre x-show="container.env" x-text="JSON.stringify(container.env, null, 2)"></pre> -->
+                          <div class="row" x-show="container.isChecked">
+                            <div class="col-md-6 ml-4 mt-3">
 
-                            <div class="form-group row mt-3" x-show="container.isChecked">
-                              <label
-                                class="col-3 col-form-label px-0"
-                                x-bind:for="`app-name-${d}-${c}`"
-                              >
-                                Application Name
-                              </label>
-                              <div class="col-6 px-0">
-                                <input
-                                  type="text"
-                                  class="form-control form-control-sm"
-                                  x-model="container.TAKIPI_APPLICATION_NAME"
-                                  x-bind:id="`app-name-${d}-${c}`"
-                                >
+                              <div class="form-group" x-show="container.isChecked">
+                                <label class="mb-1" x-bind:id="`app-name-${d}-${c}`">Application name</label>
+                                <input type="text" class="form-control form-control-sm" x-model="container.TAKIPI_APPLICATION_NAME" x-bind:id="`app-name-${d}-${c}`">
                               </div>
-                            </div>
-                            <div class="form-group row mt-3" x-show="container.isChecked">
-                              <label
-                                class="col-3 col-form-label px-0"
-                                x-bind:for="`app-name-${d}-${c}`"
-                              >
-                                Deployment Name
-                              </label>
-                              <div class="col-6 px-0">
-                                <input
-                                  type="text"
-                                  class="form-control form-control-sm"
-                                  x-model="container.TAKIPI_DEPLOYMENT_NAME"
-                                  x-bind:id="`dep-name-${d}-${c}`"
-                                >
+
+                              <div class="form-group" x-show="container.isChecked">
+                                <label class="mb-1" x-bind:id="`dep-name-${d}-${c}`">Deployment name</label>
+                                <input type="text" class="form-control form-control-sm" x-model="container.TAKIPI_DEPLOYMENT_NAME" x-bind:id="`dep-name-${d}-${c}`">
                               </div>
+
                             </div>
                           </div>
+
                         </div>
                       </template>
                     </div>
@@ -184,26 +171,65 @@
 
           <div
             class="modal fade show"
-            x-show.transition.in.duration.500ms="isOpen"
+            x-show.transition.in.duration.500ms="isConfigOpen"
             tabindex="-1"
             role="dialog"
-            @keydown.escape="isOpen = false"
-            x-ref="modal"
+            @keydown.escape="isConfigOpen = false"
+            x-ref="modalConfig"
           >
-            <div class="modal-dialog modal-dialog-scrollable" @click.away="isOpen = false">
+            <div class="modal-dialog modal-dialog-scrollable" @click.away="isConfigOpen = false">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title">Review changes</h5>
-                  <button type="button" class="close" @click="isOpen = false">
+                  <h5 class="modal-title">Configure agent</h5>
+                  <button type="button" class="close" @click="isConfigOpen = false">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
                 <div class="modal-body">
-                  <pre x-text="logger"></pre>
+
+                  <div class="form-group">
+                    <label class="mb-1" for="agent-version">Agent version</label>
+                    <input type="text" class="form-control form-control-sm" x-model="agent" id="agent-version" placeholder="4.50.2">
+                  </div>
+                  <div class="form-group">
+                    <label class="mb-1" for="collector-host">Collector host</label>
+                    <input type="text" class="form-control form-control-sm" x-model="collectorHost" id="collector-host" placeholder="overops-collector-service">
+                  </div>
+                  <div class="form-group">
+                    <label class="mb-1" for="collector-port">Collector port</label>
+                    <input type="text" class="form-control form-control-sm" x-model="collectorPort" id="collector-port" placeholder="6060">
+                  </div>
+
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-link mr-auto" @click="isOpen = false">Cancel</button>
-                  <button type="button" class="btn btn-primary" @click="applyPatch()">Apply changes</button>
+                  <button type="button" class="btn btn-primary" @click="isConfigOpen = false">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="modal fade show"
+            x-show.transition.in.duration.500ms="isReviewOpen"
+            tabindex="-1"
+            role="dialog"
+            @keydown.escape="isReviewOpen = false"
+            x-ref="modalReview"
+          >
+            <div class="modal-dialog modal-dialog-scrollable" @click.away="isReviewOpen = false">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Review patch</h5>
+                  <button type="button" class="close" @click="isReviewOpen = false">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <pre x-text="JSON.stringify(patches, null, 2)"></pre>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-link mr-auto" @click="isReviewOpen = false">Cancel</button>
+                  <button type="button" class="btn btn-primary" @click="applyPatch()">Apply patch</button>
                 </div>
               </div>
             </div>
@@ -211,7 +237,7 @@
 
         </div> <!-- /.row -->
       </div> <!-- /.container-fluid -->
-      <div class="modal-backdrop fade show" x-show="isOpen"></div>
+      <div class="modal-backdrop fade show" x-show="isReviewOpen || isConfigOpen"></div>
     </div> <!-- /. alpine data -->
     <script>
       function model() {
@@ -222,9 +248,12 @@
           deployments: [],
           numContainers: 0,
           numChecked: 0,
-          isOpen: false,
-          logger: '',
-          patch: [],
+          isConfigOpen: false,
+          isReviewOpen: false,
+          agent: '4.50.2',
+          collectorHost: 'overops-collector-service',
+          collectorPort: '6060',
+          patches: [],
 
           init() {
             fetch(apiPrefix + 'namespaces')
@@ -320,7 +349,12 @@
             let deployments = [];
 
             this.deployments.forEach(deployment => {
-              let dep = {name: deployment.metadata.name, containers: []};
+              let dep = {
+                name: deployment.metadata.name,
+                agent: this.agent,
+                containers: []
+              };
+
               deployment.spec.template.spec.containers.forEach(container => {
                 if (container.isChecked) {
                   let con = {
@@ -328,11 +362,11 @@
                     env: [
                       {
                         name: 'TAKIPI_COLLECTOR_HOST',
-                        value:'overops-collector-service'
+                        value: this.collectorHost
                       },
                       {
                         name: 'TAKIPI_COLLECTOR_PORT',
-                        value:'6060'
+                        value: this.collectorPort
                       }
                     ]
                   };
@@ -361,13 +395,12 @@
 
             });
 
-            this.patch = deployments;
-            this.logger = JSON.stringify(this.patch, null, 2);
+            this.patches = deployments;
           },
 
           applyPatch() {
             let patches = [];
-            this.patch.forEach(patch => {
+            this.patches.forEach(patch => {
               patches.push(
                 fetch(`${apiPrefix}namespaces/${this.namespace}/deployments/${patch.name}`,
                   {
@@ -375,7 +408,7 @@
                     headers: {
                       'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({containers: patch.containers})
+                    body: JSON.stringify(patch)
                   }
                 )
               );
@@ -383,7 +416,7 @@
 
             Promise.all(patches)
               .then(() => {
-                this.isOpen = false;
+                this.isReviewOpen = false;
                 this.getDeployments();
               });
           }

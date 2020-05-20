@@ -52,6 +52,7 @@ router.patch(apiPrefix + 'namespaces/:namespace/deployments/:deployment', async 
 
   const namespace = ctx.params.namespace;
   const deployment = ctx.params.deployment;
+  const agent = ctx.request.body.agent;
 
   let containers = ctx.request.body.containers;
   containers.forEach(container => {
@@ -77,7 +78,7 @@ router.patch(apiPrefix + 'namespaces/:namespace/deployments/:deployment', async 
             }],
             initContainers: [{
               name: 'overops-agent',
-              image: 'overops/agent-sidecar:4.50.2',
+              image: 'overops/agent-sidecar:' + agent,
               imagePullPolicy: 'IfNotPresent',
               resources: {
                 requests: {
