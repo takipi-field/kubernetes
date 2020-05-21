@@ -10,7 +10,7 @@ metadata:
   name: opp
 rules:
   - apiGroups: ["","apps"]
-    resources: ["pods","deployments", "namespaces"]
+    resources: ["namespaces","deployments","pods"]
     verbs: ["get", "watch", "list", "patch"]
 ---
 kind: ClusterRoleBinding

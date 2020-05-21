@@ -25,9 +25,13 @@
 
   <body>
     <div x-data="model()" x-init="init()">
-      <nav class="navbar navbar-dark sticky-top bg-dark p-0">
+      <nav class="navbar navbar-dark sticky-top bg-dark p-0 d-flex">
         <a class="navbar-brand col-3 mr-0 px-3" href="">OverOps Pod Patcher</a>
-        <button
+        <div class="flex-grow-1 mr-5">
+          <input class="form-control form-control-dark" type="text" placeholder="Search" x-model="search">
+        </div>
+        <div>
+          <button
           class="btn btn-sm btn-outline-light ml-auto mr-2"
           type="button"
           @click.prevent="
@@ -48,6 +52,7 @@
           <span class="badge badge-dark mr-1" x-text="numChecked"></span>
           Review patch
         </button>
+        </div>
       </nav>
 
       <div class="container-fluid">
@@ -81,9 +86,9 @@
               <h3>Deployments</h3>
             </div>
 
-            <template x-if="deployments.length > 0">
+            <template x-if="filteredDeployments.length > 0">
               <div>
-                <template x-for="(dep, d) in deployments" :key="d">
+                <template x-for="(dep, d) in filteredDeployments" :key="d">
                   <div class="card mb-3">
                     <div class="card-header d-flex justify-content-between align-items-center">
                       <div class="form-check user-select-none">
@@ -160,7 +165,7 @@
               </div>
             </template>
 
-            <template x-if="deployments.length === 0">
+            <template x-if="filteredDeployments.length === 0">
               <p>No deployments</p>
             </template>
 
@@ -251,6 +256,7 @@
           collectorHost: 'overops-collector-service',
           collectorPort: '6060',
           patches: [],
+          search: '',
 
           init() {
             fetch(apiPrefix + 'namespaces')
@@ -342,14 +348,14 @@
             this.deployments[d].isChecked = allContainersChecked;
           },
 
-          getPatch(remove) {
+          getPatch(disable) {
             let deployments = [];
 
             this.deployments.forEach(deployment => {
               let dep = {
                 name: deployment.metadata.name,
                 agent: this.agent,
-                remove: remove,
+                disable: disable,
                 containers: []
               };
 
@@ -360,16 +366,16 @@
                     env: [
                       {
                         name: 'TAKIPI_COLLECTOR_HOST',
-                        value: (remove ? null : this.collectorHost)
+                        value: (disable ? null : this.collectorHost)
                       },
                       {
                         name: 'TAKIPI_COLLECTOR_PORT',
-                        value: (remove ? null : this.collectorPort)
+                        value: (disable ? null : this.collectorPort)
                       }
                     ]
                   };
 
-                  if (remove) {
+                  if (disable) {
                     con.env.push({
                       name: 'TAKIPI_APPLICATION_NAME',
                       value: null
@@ -381,7 +387,7 @@
                     });
                   }
 
-                  if (remove) {
+                  if (disable) {
                     con.env.push({
                       name: 'TAKIPI_DEPLOYMENT_NAME',
                       value: null
@@ -427,6 +433,14 @@
                 this.isReviewOpen = false;
                 this.getDeployments();
               });
+          },
+
+          get filteredDeployments () {
+            if (this.search === '') return this.deployments;
+
+            return this.deployments.filter(deployment => {
+              return deployment.metadata.name.toLowerCase().includes(this.search.toLowerCase());
+            });
           },
 
         }
