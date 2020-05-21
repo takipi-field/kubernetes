@@ -41,7 +41,7 @@
           x-bind:disabled="numChecked < 1"
           type="button"
           @click.prevent="
-            getPatch();
+            getPatch(false);
             isReviewOpen = true;
             $nextTick(() => $refs.modalReview.focus());
           ">
@@ -73,7 +73,6 @@
                   </li>
                 </template>
               </ul>
-
             </div>
           </nav>
 
@@ -95,69 +94,67 @@
                         </label>
                       </div>
                       <template x-if="dep.spec.template.spec.initContainers">
-                        <div class="ml-auto mr-2">
+                        <div class="mr-auto ml-2">
                           <template x-for="(initContainer, ic) in dep.spec.template.spec.initContainers" :key="ic">
                             <div x-show="initContainer.image.startsWith('overops/agent-sidecar')">
-                              <!-- <span x-text="initContainer.name"></span>: -->
                               <span class="badge badge-dark" x-text="initContainer.image"></span>
                             </div>
                           </template>
                         </div>
-                      </template>
-                      <template x-if="dep.metadata.annotations">
-                        <span
-                          class="font-weight-light"
-                          x-text="`rev ${dep.metadata.annotations['deployment.kubernetes.io/revision']}`"
-                        >
-                        </span>
-                      </template>
+                    </template>
+                    <div class="d-flex align-items-center">
+                      <span
+                        x-show="dep.metadata.annotations"
+                        class="font-weight-light"
+                        x-text="`rev ${dep.metadata.annotations['deployment.kubernetes.io/revision']}`"
+                      ></span>
                     </div>
-                    <div class="card-body">
-                      <template x-for="(container, c) in dep.spec.template.spec.containers" :key="c">
-                        <div>
-                          <div class="form-check card-text mb-1 user-select-none">
-                            <label class="form-check-label">
-                              <input class="form-check-input" type="checkbox" x-model="container.isChecked" @click.prevent="toggleContainer(d,c)">
-                              <span x-text="container.name"></span> &ndash;
-                              <span class="font-weight-light" x-text="container.image"></span>
-                            </label>
+                  </div>
+                  <div class="card-body">
+                    <template x-for="(container, c) in dep.spec.template.spec.containers" :key="c">
+                      <div>
+                        <div class="form-check card-text mb-1 user-select-none">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" x-model="container.isChecked" @click.prevent="toggleContainer(d,c)">
+                            <span x-text="container.name"></span> &ndash;
+                            <span class="font-weight-light" x-text="container.image"></span>
+                          </label>
 
-                            <span
-                              class="badge badge-primary"
-                              x-show="container.ENV_TAKIPI_APPLICATION_NAME"
-                              x-text="`app: ${container.ENV_TAKIPI_APPLICATION_NAME}`"
-                            ></span>
-                            <span
-                              class="badge badge-primary"
-                              x-show="container.ENV_TAKIPI_DEPLOYMENT_NAME"
-                              x-text="`dep: ${container.ENV_TAKIPI_DEPLOYMENT_NAME}`"
-                            ></span>
-                            <span
-                              class="badge badge-info"
-                              x-show="container.ENV_TAKIPI_COLLECTOR_HOST"
-                              x-html="`<span class='text-monospace'>${container.ENV_TAKIPI_COLLECTOR_HOST}:${container.ENV_TAKIPI_COLLECTOR_PORT}</span>`"
-                            ></span>
-                          </div>
-
-                          <div class="row" x-show="container.isChecked">
-                            <div class="col-md-6 ml-4 mt-3">
-
-                              <div class="form-group" x-show="container.isChecked">
-                                <label class="mb-1" x-bind:id="`app-name-${d}-${c}`">Application name</label>
-                                <input type="text" class="form-control form-control-sm" x-model="container.TAKIPI_APPLICATION_NAME" x-bind:id="`app-name-${d}-${c}`">
-                              </div>
-
-                              <div class="form-group" x-show="container.isChecked">
-                                <label class="mb-1" x-bind:id="`dep-name-${d}-${c}`">Deployment name</label>
-                                <input type="text" class="form-control form-control-sm" x-model="container.TAKIPI_DEPLOYMENT_NAME" x-bind:id="`dep-name-${d}-${c}`">
-                              </div>
-
-                            </div>
-                          </div>
-
+                          <span
+                            class="badge badge-primary"
+                            x-show="container.ENV_TAKIPI_APPLICATION_NAME"
+                            x-text="`app: ${container.ENV_TAKIPI_APPLICATION_NAME}`"
+                          ></span>
+                          <span
+                            class="badge badge-primary"
+                            x-show="container.ENV_TAKIPI_DEPLOYMENT_NAME"
+                            x-text="`dep: ${container.ENV_TAKIPI_DEPLOYMENT_NAME}`"
+                          ></span>
+                          <span
+                            class="badge badge-info"
+                            x-show="container.ENV_TAKIPI_COLLECTOR_HOST"
+                            x-html="`<span class='text-monospace'>${container.ENV_TAKIPI_COLLECTOR_HOST}:${container.ENV_TAKIPI_COLLECTOR_PORT}</span>`"
+                          ></span>
                         </div>
-                      </template>
-                    </div>
+
+                        <div class="row" x-show="container.isChecked">
+                          <div class="col-md-6 ml-4 mt-3">
+
+                            <div class="form-group" x-show="container.isChecked">
+                              <label class="mb-1" x-bind:id="`app-name-${d}-${c}`">Application name</label>
+                              <input type="text" class="form-control form-control-sm" x-model="container.TAKIPI_APPLICATION_NAME" x-bind:id="`app-name-${d}-${c}`">
+                            </div>
+
+                            <div class="form-group" x-show="container.isChecked">
+                              <label class="mb-1" x-bind:id="`dep-name-${d}-${c}`">Deployment name</label>
+                              <input type="text" class="form-control form-control-sm" x-model="container.TAKIPI_DEPLOYMENT_NAME" x-bind:id="`dep-name-${d}-${c}`">
+                            </div>
+
+                          </div>
+                        </div>
+
+                      </div>
+                    </template>
                   </div>
                 </template>
               </div>
@@ -202,7 +199,7 @@
 
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-primary" @click="isConfigOpen = false">Close</button>
+                  <button type="button" class="btn btn-sm btn-primary" @click="isConfigOpen = false">Close</button>
                 </div>
               </div>
             </div>
@@ -228,8 +225,8 @@
                   <pre x-text="JSON.stringify(patches, null, 2)"></pre>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-link mr-auto" @click="isReviewOpen = false">Cancel</button>
-                  <button type="button" class="btn btn-primary" @click="applyPatch()">Apply patch</button>
+                  <button type="button" class="btn btn-sm btn-link mr-auto" @click="getPatch(true)">Disable OverOps</button>
+                  <button type="button" class="btn btn-sm btn-primary" @click="applyPatch()">Apply patch</button>
                 </div>
               </div>
             </div>
@@ -345,13 +342,14 @@
             this.deployments[d].isChecked = allContainersChecked;
           },
 
-          getPatch() {
+          getPatch(remove) {
             let deployments = [];
 
             this.deployments.forEach(deployment => {
               let dep = {
                 name: deployment.metadata.name,
                 agent: this.agent,
+                remove: remove,
                 containers: []
               };
 
@@ -362,23 +360,33 @@
                     env: [
                       {
                         name: 'TAKIPI_COLLECTOR_HOST',
-                        value: this.collectorHost
+                        value: (remove ? null : this.collectorHost)
                       },
                       {
                         name: 'TAKIPI_COLLECTOR_PORT',
-                        value: this.collectorPort
+                        value: (remove ? null : this.collectorPort)
                       }
                     ]
                   };
 
-                  if (container.TAKIPI_APPLICATION_NAME && container.TAKIPI_APPLICATION_NAME.trim() !== "") {
+                  if (remove) {
+                    con.env.push({
+                      name: 'TAKIPI_APPLICATION_NAME',
+                      value: null
+                    });
+                  } else if (container.TAKIPI_APPLICATION_NAME && container.TAKIPI_APPLICATION_NAME.trim() !== "") {
                     con.env.push({
                       name: 'TAKIPI_APPLICATION_NAME',
                       value: container.TAKIPI_APPLICATION_NAME.trim()
                     });
                   }
 
-                  if (container.TAKIPI_DEPLOYMENT_NAME && container.TAKIPI_DEPLOYMENT_NAME.trim() !== "") {
+                  if (remove) {
+                    con.env.push({
+                      name: 'TAKIPI_DEPLOYMENT_NAME',
+                      value: null
+                    });
+                  } else if (container.TAKIPI_DEPLOYMENT_NAME && container.TAKIPI_DEPLOYMENT_NAME.trim() !== "") {
                     con.env.push({
                       name: 'TAKIPI_DEPLOYMENT_NAME',
                       value: container.TAKIPI_DEPLOYMENT_NAME.trim()
@@ -419,7 +427,7 @@
                 this.isReviewOpen = false;
                 this.getDeployments();
               });
-          }
+          },
 
         }
       }

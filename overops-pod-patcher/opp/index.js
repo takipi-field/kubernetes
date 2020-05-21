@@ -53,6 +53,9 @@ router.patch(apiPrefix + 'namespaces/:namespace/deployments/:deployment', async 
   const namespace = ctx.params.namespace;
   const deployment = ctx.params.deployment;
   const agent = ctx.request.body.agent;
+  const remove = ctx.request.body.remove;
+
+  const javaToolOptions = (remove ? null : '-agentpath:/takipi/lib/libTakipiAgent.so');
 
   let containers = ctx.request.body.containers;
   containers.forEach(container => {
@@ -62,7 +65,7 @@ router.patch(apiPrefix + 'namespaces/:namespace/deployments/:deployment', async 
     }];
     container.env.push({
       name: 'JAVA_TOOL_OPTIONS',
-      value:'-agentpath:/takipi/lib/libTakipiAgent.so'
+      value: javaToolOptions
     });
   });
 
