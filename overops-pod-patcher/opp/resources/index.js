@@ -47,9 +47,13 @@ function model() {
       .then(data => {
           this.deployments = data.body.items;
 
-          // find takipi env vars
           this.deployments.forEach(deployment => {
             deployment.spec.template.spec.containers.forEach(container => {
+              // disable patching of overops images
+              if (container.image.startsWith('overops/')) {
+                deployment.disabled = true;
+              }
+              // find takipi env vars
               if (container.env) {
                 container.env.forEach(env => {
                   switch(env.name) {
