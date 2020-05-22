@@ -19,18 +19,17 @@
 }
 
 
-/* custom scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #22282d;
+  background: rgba(0,0,0,0.25);
 }
 ::-webkit-scrollbar-thumb {
-  background: #171b1f;
+  background: rgba(0,0,0,0.5);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #0c0e10;
+  background: rgba(0,0,0,0.75);
 }
 
 .navbar-brand {
