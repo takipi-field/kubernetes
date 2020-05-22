@@ -48,7 +48,7 @@
             x-bind:disabled="numChecked < 1"
             type="button"
             @click.prevent="
-              getPatch(false);
+              createPatch(false);
               isReviewOpen = true;
               $nextTick(() => $refs.modalReview.focus());
             "
@@ -62,7 +62,7 @@
       <div class="container-fluid">
         <div class="row">
           <nav class="sidebar col-3 d-block pt-5 px-0">
-            <div class="sidebar-sticky pt-3">
+            <div class="sidebar-sticky pt-3 mr-3">
 
               <p class="px-3 mt-4 mb-1 text-uppercase text-muted font-weight-bold">
                 Namespace
@@ -89,6 +89,8 @@
             <div class="pt-3 pb-2">
               <h4>Deployments</h4>
             </div>
+
+            <div class="alert alert-dark" role="alert" x-show="error" x-text="error"></div>
 
             <template x-if="filteredDeployments.length > 0">
               <div>
@@ -241,7 +243,7 @@
                   <pre x-text="JSON.stringify(patches, null, 2)"></pre>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-sm btn-link mr-auto" @click="getPatch(true)">Disable OverOps</button>
+                  <button type="button" class="btn btn-sm btn-link mr-auto" @click="createPatch(true)">Disable OverOps</button>
                   <button type="button" class="btn btn-sm btn-outline-light" @click="applyPatch()">Apply patch</button>
                 </div>
               </div>
@@ -252,222 +254,6 @@
       </div> <!-- /.container-fluid -->
       <div class="modal-backdrop fade show" x-show="isReviewOpen || isConfigOpen"></div>
     </div> <!-- /. alpine data -->
-    <script>
-      function model() {
-        const apiPrefix = 'api/v1/';
-        return {
-          namespaces: [],
-          namespace: 'default',
-          deployments: [],
-          numContainers: 0,
-          numChecked: 0,
-          isConfigOpen: false,
-          isReviewOpen: false,
-          agent: '',
-          collectorHost: '',
-          collectorPort: '',
-          patches: [],
-          search: '',
-          agentVersions: [],
-
-          init() {
-            fetch(apiPrefix + 'namespaces')
-              .then(response => response.json())
-              .then(data => this.namespaces = data.body.items);
-
-            this.getDeployments();
-            this.getAgentVersions();
-          },
-
-          setNamespace(namespace) {
-            this.namespace = namespace;
-            this.getDeployments();
-          },
-
-          getDeployments() {
-            fetch(`${apiPrefix}namespaces/${this.namespace}/deployments`)
-              .then(response => response.json())
-              .then(data => {
-                this.deployments = data.body.items;
-                this.getNumContainers();
-                this.getTakipiEnvVars();
-              });
-          },
-
-          getNumContainers() {
-            let numContainers = 0;
-            this.deployments.forEach(deployment => {
-              numContainers += deployment.spec.template.spec.containers.length;
-            });
-            this.numContainers = numContainers;
-            this.numChecked = 0;
-          },
-
-          getNumChecked() {
-            let numChecked = 0;
-            this.deployments.forEach(deployment => {
-              deployment.spec.template.spec.containers.forEach(container => {
-                if (container.isChecked) numChecked++;
-              });
-            });
-            this.numChecked = numChecked;
-          },
-
-          getTakipiEnvVars() {
-            this.deployments.forEach(deployment => {
-              deployment.spec.template.spec.containers.forEach(container => {
-                if (container.env) {
-                  container.env.forEach(env => {
-                    switch(env.name) {
-                      case 'TAKIPI_APPLICATION_NAME':
-                        container.ENV_TAKIPI_APPLICATION_NAME = env.value;
-                        container.TAKIPI_APPLICATION_NAME = env.value;
-                        break;
-                      case 'TAKIPI_DEPLOYMENT_NAME':
-                        container.ENV_TAKIPI_DEPLOYMENT_NAME = env.value;
-                        container.TAKIPI_DEPLOYMENT_NAME = env.value;
-                        break;
-                      case 'TAKIPI_COLLECTOR_HOST': container.ENV_TAKIPI_COLLECTOR_HOST = env.value; break;
-                      case 'TAKIPI_COLLECTOR_PORT': container.ENV_TAKIPI_COLLECTOR_PORT = env.value; break;
-                    }
-                  });
-                }
-              });
-            });
-          },
-
-          toggleDeployment(d) {
-            this.deployments[d].isChecked = !this.deployments[d].isChecked;
-
-            this.deployments[d].spec.template.spec.containers.forEach(container => {
-              container.isChecked = this.deployments[d].isChecked;
-            });
-
-            this.getNumChecked();
-          },
-
-          toggleContainer(d,c) {
-            this.deployments[d].spec.template.spec.containers[c].isChecked = 
-              !this.deployments[d].spec.template.spec.containers[c].isChecked;
-
-            this.numChecked += (this.deployments[d].spec.template.spec.containers[c].isChecked ? 1 : -1);
-
-            let allContainersChecked = true;
-
-            this.deployments[d].spec.template.spec.containers.forEach(container => {
-              allContainersChecked = allContainersChecked && container.isChecked;
-            });
-
-            this.deployments[d].isChecked = allContainersChecked;
-          },
-
-          getPatch(disable) {
-            let deployments = [];
-
-            this.deployments.forEach(deployment => {
-              let dep = {
-                name: deployment.metadata.name,
-                agent: this.agent,
-                disable: disable,
-                containers: []
-              };
-
-              deployment.spec.template.spec.containers.forEach(container => {
-                if (container.isChecked) {
-                  let con = {
-                    name: container.name,
-                    env: [
-                      {
-                        name: 'TAKIPI_COLLECTOR_HOST',
-                        value: (disable ? null : this.collectorHost || 'overops-collector-service')
-                      },
-                      {
-                        name: 'TAKIPI_COLLECTOR_PORT',
-                        value: (disable ? null : this.collectorPort || '6060')
-                      }
-                    ]
-                  };
-
-                  if (disable) {
-                    con.env.push({
-                      name: 'TAKIPI_APPLICATION_NAME',
-                      value: null
-                    });
-                  } else if (container.TAKIPI_APPLICATION_NAME && container.TAKIPI_APPLICATION_NAME.trim() !== "") {
-                    con.env.push({
-                      name: 'TAKIPI_APPLICATION_NAME',
-                      value: container.TAKIPI_APPLICATION_NAME.trim()
-                    });
-                  }
-
-                  if (disable) {
-                    con.env.push({
-                      name: 'TAKIPI_DEPLOYMENT_NAME',
-                      value: null
-                    });
-                  } else if (container.TAKIPI_DEPLOYMENT_NAME && container.TAKIPI_DEPLOYMENT_NAME.trim() !== "") {
-                    con.env.push({
-                      name: 'TAKIPI_DEPLOYMENT_NAME',
-                      value: container.TAKIPI_DEPLOYMENT_NAME.trim()
-                    });
-                  }
-
-                  dep.containers.push(con);
-                }
-              });
-
-              if (dep.containers.length > 0) {
-                deployments.push(dep);
-              }
-
-            });
-
-            this.patches = deployments;
-          },
-
-          applyPatch() {
-            let patches = [];
-            this.patches.forEach(patch => {
-              patches.push(
-                fetch(`${apiPrefix}namespaces/${this.namespace}/deployments/${patch.name}`,
-                  {
-                    method: 'PATCH',
-                    headers: {
-                      'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(patch)
-                  }
-                )
-              );
-            });
-
-            Promise.all(patches)
-              .then(() => {
-                this.isReviewOpen = false;
-                this.getDeployments();
-              });
-          },
-
-          get filteredDeployments () {
-            if (this.search === '') return this.deployments;
-
-            return this.deployments.filter(deployment => {
-              return deployment.metadata.name.toLowerCase().includes(this.search.toLowerCase());
-            });
-          },
-
-          getAgentVersions() {
-            fetch(apiPrefix + '/repositories/overops/agent-sidecar/tags')
-              .then(response => response.json())
-              .then(data => {
-                this.agentVersions = data;
-                this.agent = data[0].name;
-              });
-          }
-
-        }
-      }
-    </script>
-
+    <script src="./index.js"></script>
   </body>
 </html>
