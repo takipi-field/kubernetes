@@ -1,7 +1,9 @@
 :root {
   --dark-bg: #131f29;
   --bg: #2d353c;
+  --card-bg: #434f59;
   --light-bg: #38424b;
+
   --font-weight-light: 100;
   --font-weight-normal: 300;
   --font-weight-bold: 500;
@@ -142,7 +144,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .card {
-  background-color: var(--bg);
+  background-color: var(--card-bg);
   border-radius: .1rem;
   /* border: 1px solid rgb(19, 31, 41, 0.5); */
   border: none;
@@ -165,6 +167,10 @@ a:hover, .btn-link:hover, a.active {
   text-decoration: underline;
 }
 
+.nav-link.active {
+  border-left: 4px solid #51b2e9
+}
+
 .btn-primary {
   border-color: var(--primary);
   background-color: var(--primary);
@@ -184,7 +190,7 @@ pre {
 }
 
 .modal-content {
-  background-color: var(--bg);
+  background-color: var(--card-bg);
   box-shadow: 0px 1px 4px -1px rgba(0,0,0,0.75);
   border-radius: .2em;
 }
