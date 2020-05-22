@@ -6,6 +6,7 @@ function model() {
     deployments: [],
     isConfigOpen: false,
     isReviewOpen: false,
+    isLoading: false,
     agentVersions: [],
     agent: '',
     collectorHost: '',
@@ -203,6 +204,7 @@ function model() {
     },
 
     applyPatch() {
+      this.isLoading = true;
       let patches = [];
       this.patches.forEach(patch => {
         patches.push(
@@ -220,12 +222,15 @@ function model() {
 
       Promise.all(patches)
         .then(response => {
-          if (!response.ok) {
-            this.error = 'Error applying patch';
-          }
+          response.forEach(res => {
+            if (!res.ok) {
+              this.error = 'Error applying patch';
+            }
+          })
         })
         .then(() => {
           this.isReviewOpen = false;
+          this.isLoading = false;
           this.fetchDeployments();
         });
     }

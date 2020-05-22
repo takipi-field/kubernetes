@@ -244,7 +244,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-sm btn-link mr-auto" @click="createPatch(true)">Disable OverOps</button>
-                  <button type="button" class="btn btn-sm btn-outline-light" @click="applyPatch()">Apply patch</button>
+                  <button type="button" class="btn btn-sm btn-outline-light" @click="applyPatch()" x-bind:disabled="isLoading">Apply patch</button>
                 </div>
               </div>
             </div>
