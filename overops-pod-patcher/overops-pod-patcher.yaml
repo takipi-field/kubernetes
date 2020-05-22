@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: opp
+  name: overops-pod-patcher
   namespace: default
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: opp
+  name: overops-pod-patcher
 rules:
   - apiGroups: ["","apps"]
     resources: ["namespaces","deployments","pods"]
@@ -16,36 +16,36 @@ rules:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: opp
+  name: overops-pod-patcher
 subjects:
   - kind: ServiceAccount
-    name: opp
+    name: overops-pod-patcher
     namespace: default
 roleRef:
   kind: ClusterRole
-  name: opp
+  name: overops-pod-patcher
   apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: opp
+  name: overops-pod-patcher
   labels:
-    app: opp
+    app: overops-pod-patcher
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: opp
+      app: overops-pod-patcher
   template:
     metadata:
       labels:
-        app: opp
+        app: overops-pod-patcher
     spec:
-      serviceAccount: opp
+      serviceAccount: overops-pod-patcher
       containers:
-      - image: opp:latest
-        name: opp
+      - image: overops/pod-patcher:latest
+        name: overops-pod-patcher
         imagePullPolicy: Never
         resources:
           requests:
@@ -58,10 +58,10 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: opp
+  name: overops-pod-patcher
 spec:
   selector:
-    app: opp
+    app: overops-pod-patcher
   ports:
     - protocol: TCP
       port: 3000
