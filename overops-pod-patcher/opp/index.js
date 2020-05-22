@@ -3,6 +3,7 @@ const Koa = require('koa');
 const Router = require('@koa/router');
 const bodyParser = require('koa-bodyparser');
 const Client = require('kubernetes-client').Client;
+const fetch = require('node-fetch');
 
 const app = new Koa();
 const router = new Router();
@@ -104,6 +105,43 @@ router.patch(apiPrefix + 'namespaces/:namespace/deployments/:deployment', async 
       }
     }
   });
+});
+
+router.get(apiPrefix + 'repositories/overops/agent-sidecar/tags', async (ctx, next) => {
+  await next();
+  await client.loadSpec();
+
+  // try {
+
+    const response = await fetch('https://registry.hub.docker.com/v1/repositories/overops/agent-sidecar/tags');
+    let data = await response.json();
+
+    // sort by latest
+    data.sort(function(a, b) {
+      if (a.name.startsWith('alpine') && !b.name.startsWith('alpine')) {
+        return 1;
+      }
+      if (!a.name.startsWith('alpine') && b.name.startsWith('alpine')) {
+        return -1;
+      }
+      if (a.name < b.name) {
+        return 1;
+      }
+      if (a.name > b.name) {
+        return -1;
+      }
+      return 0;
+    });
+
+    // remove 'latest' and 'debug' versions
+    data = data.filter(tag => tag.name !== 'latest' && tag.name !== 'debug');
+
+  // } catch (error) {
+  //   console.log(error);
+  // }
+
+  ctx.type = 'json';
+  ctx.body = data;
 });
 
 app

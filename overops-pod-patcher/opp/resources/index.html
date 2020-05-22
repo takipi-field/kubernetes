@@ -5,20 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="shortcut icon" type="image/png" sizes="48x48" href="./overops-favicon-48x48.png"/>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://getbootstrap.com/docs/4.5/examples/dashboard/dashboard.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="./bootstrap/4.5.0/bootstrap.min.css">
+    <link rel="stylesheet" href="./style.css">
 
-    <style>
-      .navbar-brand {
-        background-color: unset;
-        box-shadow: unset;
-      }
-      .modal {
-        display: block;
-      }
-    </style>
-
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100;300&family=Roboto:ital,wght@0,100;0,300;0,500;1,300&display=swap" rel="stylesheet">
+    <script src="./alpinejs/2.3.5/alpine.min.js" defer></script>
 
     <title>OverOps Pod Patcher</title>
   </head>
@@ -26,50 +17,63 @@
   <body>
     <div x-data="model()" x-init="init()">
       <nav class="navbar navbar-dark sticky-top bg-dark p-0 d-flex">
-        <a class="navbar-brand col-3 mr-0 px-3" href="">OverOps Pod Patcher</a>
+        <a class="navbar-brand col-3 mr-0 px-3" href="">
+          <svg class="logo mr-1" viewBox="0 0 334.03 73.76">
+            <g>
+              <path class="cls-1" d="M252.14,42.26c-3.23,21.66-10.74,28.22-28.29,28.22-17.2,0-24.44-7-21.21-29,3.14-20.86,10.3-28.22,28.55-28.22C248.3,13.24,255.37,20.6,252.14,42.26Zm-38.06,0c-2.36,15.11-.18,19.67,10,19.67s14.14-4.64,16.59-20.47c2.53-15.67.09-19.67-10-19.67C220.19,21.8,216.61,26.2,214.08,42.26Z" transform="translate(-10.92 -13.24)"/>
+              <path class="cls-1" d="M112.79,29,99.84,62.38A13.08,13.08,0,0,1,88,70.59V71H80a3.32,3.32,0,0,1-3.23-2.78L68.69,29H79.88l5.39,34H86v.32a5.89,5.89,0,0,0,5.08-3.76L102.22,29Z" transform="translate(-10.92 -13.24)"/>
+              <path class="cls-1" d="M149.93,69c-5.3,1.5-10.25,1.58-15.67,1.58-15.56,0-20.81-7.2-18.8-21.61,2.19-15.29,8.39-19.69,24.22-19.69,15,0,18.27,5.2,17.14,13s-6.47,10.73-17.22,11.37l-13.55,1c.18,6.64,3.76,7.93,9.62,7.93,4.55,0,10.44-.45,15.6-1Zm-11-21.79c4.72-.32,6.91-1.52,7.52-5.76.44-4.4-1.84-4.48-8-4.48-7.61.08-10.05,2.08-11.71,11.21Z" transform="translate(-10.92 -13.24)"/>
+              <path class="cls-1" d="M315.84,51c-6.56-2.72-9.18-6.24-8.48-11.85,1-7.36,6.73-9.85,18.62-9.77a161.6,161.6,0,0,1,19,1.44l-2.54,6.64c-5.51-.16-9.26-.24-15.73-.24s-8.74.08-9.09,2.56,1.57,3.12,4.9,4.48l10.93,4.48c6.91,2.8,9.7,5.52,8.83,11.61-1.4,9.13-8.48,10.25-20.72,10.25-9.35,0-10.93-.56-17.57-1.28l2.58-6.8c3.5.24,8,.32,11.85.32,10.67,0,13-.64,13.55-3.12.35-2.4-1.49-2.72-5.16-4.24Z" transform="translate(-10.92 -13.24)"/>
+              <path class="cls-1" d="M280.91,29.15c-15.3,0-21.59,5.68-23.86,20.49L251.48,87h11.11l2.63-17.74c2.9,1.14,6.09,1.38,10.53,1.38,14.86,0,21.33-5.5,23.6-20.31C301.72,35.13,295.86,29.15,280.91,29.15Zm7.52,20.41c-1.57,10.25-4.55,13.21-12.59,13.21a37.61,37.61,0,0,1-9.35-1.49s1-6.85,1.66-11c1.66-10.81,4.81-13.37,12.68-13.37C288.34,36.91,290,39.55,288.43,49.56Z" transform="translate(-10.92 -13.24)"/>
+              <path class="cls-1" d="M198.09,29H183.54c-12.77,0-18.13,5-20.32,17h0l-3.72,25h10.58l3.53-25h0c1.54-8,4.34-10,10.49-10h11.25Z" transform="translate(-10.92 -13.24)"/>
+              <path class="cls-2" d="M23.11,42.74c2.53-16.07,6.11-20.23,16.67-20.23,7.28,0,10.55,2.49,10.84,9.49H61.86c-.65-13-7.43-18-20.27-18H10.92l11.13,4.27c-5.57,4.28-8.61,12.07-10.38,23.81A52.93,52.93,0,0,0,11,49H22.4A45.64,45.64,0,0,1,23.11,42.74Z" transform="translate(-10.92 -13.24)"/>
+              <path class="cls-1" d="M49.73,41.36c-2.44,15.83-6.37,20.41-16.59,20.41C26,61.77,22.81,60,22.32,53H11c.85,13,8.22,17.37,21.87,17.37,17.55,0,25.06-6.62,28.29-28.28A42.61,42.61,0,0,0,61.8,36H50.43C50.28,38,50,39.43,49.73,41.36Z" transform="translate(-10.92 -13.24)"/>
+            </g>
+          </svg>
+          Pod Patcher
+        </a>
         <div class="flex-grow-1 mr-5">
-          <input class="form-control form-control-dark" type="text" placeholder="Search" x-model="search">
+          <input class="form-control form-control-dark" type="text" placeholder="Search deployments" x-model="search">
         </div>
         <div>
           <button
-          class="btn btn-sm btn-outline-light ml-auto mr-2"
-          type="button"
-          @click.prevent="
-            isConfigOpen = true;
-            $nextTick(() => $refs.modalConfig.focus());
-          ">
-          Configure agent
-        </button>
-        <button
-          class="btn btn-sm btn-light mr-3"
-          x-bind:disabled="numChecked < 1"
-          type="button"
-          @click.prevent="
-            getPatch(false);
-            isReviewOpen = true;
-            $nextTick(() => $refs.modalReview.focus());
-          ">
-          <span class="badge badge-dark mr-1" x-text="numChecked"></span>
-          Review patch
-        </button>
+            class="btn btn-sm btn-outline-light ml-auto mr-2"
+            type="button"
+            @click.prevent="isConfigOpen = true; $nextTick(() => $refs.modalConfig.focus());"
+          >
+            Configure agent
+          </button>
+          <button
+            class="btn btn-sm btn-light mr-3"
+            x-bind:disabled="numChecked < 1"
+            type="button"
+            @click.prevent="
+              getPatch(false);
+              isReviewOpen = true;
+              $nextTick(() => $refs.modalReview.focus());
+            "
+          >
+            <span class="badge badge-dark mr-1 pt-1" x-text="numChecked"></span>
+            Review patch
+          </button>
         </div>
       </nav>
 
       <div class="container-fluid">
         <div class="row">
-          <nav id="sidebarMenu" class="col-3 d-block bg-light sidebar">
+          <nav class="sidebar col-3 d-block pt-5 px-0">
             <div class="sidebar-sticky pt-3">
 
-              <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                <span>Namespace</span>
-              </h6>
+              <p class="px-3 mt-4 mb-1 text-uppercase text-muted font-weight-bold">
+                Namespace
+              </p>
 
               <ul class="nav flex-column">
                 <template x-if="namespaces.length > 0" x-for="ns in namespaces">
                   <li class="nav-item" :key="ns.metadata.name">
                     <a
                       href="#"
-                      class="nav-link"
+                      class="nav-link py-1"
                       :class="{ 'active': namespace === ns.metadata.name }"
                       @click.prevent="setNamespace(ns.metadata.name)"
                       @keydown.escape="isReviewOpen = false"
@@ -82,8 +86,8 @@
           </nav>
 
           <main role="main" class="col-9 ml-auto px-4">
-            <div class="pt-3 pb-2 mb-3">
-              <h3>Deployments</h3>
+            <div class="pt-3 pb-2">
+              <h4>Deployments</h4>
             </div>
 
             <template x-if="filteredDeployments.length > 0">
@@ -118,27 +122,29 @@
                   <div class="card-body">
                     <template x-for="(container, c) in dep.spec.template.spec.containers" :key="c">
                       <div>
-                        <div class="form-check card-text mb-1 user-select-none">
-                          <label class="form-check-label">
-                            <input class="form-check-input" type="checkbox" x-model="container.isChecked" @click.prevent="toggleContainer(d,c)">
-                            <span x-text="container.name"></span> &ndash;
-                            <span class="font-weight-light" x-text="container.image"></span>
-                          </label>
+                        <div class="d-flex align-items-center">
+                          <div class="form-check card-text user-select-none">
+                            <label class="form-check-label">
+                              <input class="form-check-input" type="checkbox" x-model="container.isChecked" @click.prevent="toggleContainer(d,c)">
+                              <span x-text="container.name"></span> &ndash;
+                              <span class="font-weight-light text-monospace" x-text="container.image"></span>
+                            </label>
+                          </div>
 
                           <span
-                            class="badge badge-primary"
+                            class="badge badge-dark ml-2"
                             x-show="container.ENV_TAKIPI_APPLICATION_NAME"
-                            x-text="`app: ${container.ENV_TAKIPI_APPLICATION_NAME}`"
+                            x-html="`app: <span class='text-monospace'>${container.ENV_TAKIPI_APPLICATION_NAME}</span>`"
                           ></span>
                           <span
-                            class="badge badge-primary"
+                            class="badge badge-dark ml-1"
                             x-show="container.ENV_TAKIPI_DEPLOYMENT_NAME"
-                            x-text="`dep: ${container.ENV_TAKIPI_DEPLOYMENT_NAME}`"
+                            x-html="`dep: <span class='text-monospace'>${container.ENV_TAKIPI_DEPLOYMENT_NAME}</span>`"
                           ></span>
                           <span
-                            class="badge badge-info"
+                            class="badge badge-dark ml-1"
                             x-show="container.ENV_TAKIPI_COLLECTOR_HOST"
-                            x-html="`<span class='text-monospace'>${container.ENV_TAKIPI_COLLECTOR_HOST}:${container.ENV_TAKIPI_COLLECTOR_PORT}</span>`"
+                            x-html="`collector: <span class='text-monospace'>${container.ENV_TAKIPI_COLLECTOR_HOST}:${container.ENV_TAKIPI_COLLECTOR_PORT}</span>`"
                           ></span>
                         </div>
 
@@ -147,12 +153,12 @@
 
                             <div class="form-group" x-show="container.isChecked">
                               <label class="mb-1" x-bind:id="`app-name-${d}-${c}`">Application name</label>
-                              <input type="text" class="form-control form-control-sm" x-model="container.TAKIPI_APPLICATION_NAME" x-bind:id="`app-name-${d}-${c}`">
+                              <input type="text" class="form-control form-control-sm form-control-dark" x-model="container.TAKIPI_APPLICATION_NAME" x-bind:id="`app-name-${d}-${c}`">
                             </div>
 
                             <div class="form-group" x-show="container.isChecked">
                               <label class="mb-1" x-bind:id="`dep-name-${d}-${c}`">Deployment name</label>
-                              <input type="text" class="form-control form-control-sm" x-model="container.TAKIPI_DEPLOYMENT_NAME" x-bind:id="`dep-name-${d}-${c}`">
+                              <input type="text" class="form-control form-control-sm form-control-dark" x-model="container.TAKIPI_DEPLOYMENT_NAME" x-bind:id="`dep-name-${d}-${c}`">
                             </div>
 
                           </div>
@@ -184,27 +190,32 @@
                 <div class="modal-header">
                   <h5 class="modal-title">Configure agent</h5>
                   <button type="button" class="close" @click="isConfigOpen = false">
-                    <span aria-hidden="true">&times;</span>
+                    &times;
                   </button>
                 </div>
                 <div class="modal-body">
 
                   <div class="form-group">
                     <label class="mb-1" for="agent-version">Agent version</label>
-                    <input type="text" class="form-control form-control-sm" x-model="agent" id="agent-version" placeholder="4.50.2">
+                    <select class="form-control form-control-sm form-control-dark" x-model="agent">
+                      <template x-for="version in agentVersions">
+                        <option :key="version.name" :value="version.name" x-text="version.name">
+                        </option>
+                      </template>
+                    </select>
                   </div>
                   <div class="form-group">
                     <label class="mb-1" for="collector-host">Collector host</label>
-                    <input type="text" class="form-control form-control-sm" x-model="collectorHost" id="collector-host" placeholder="overops-collector-service">
+                    <input type="text" class="form-control form-control-sm form-control-dark" x-model="collectorHost" id="collector-host" placeholder="overops-collector-service">
                   </div>
                   <div class="form-group">
                     <label class="mb-1" for="collector-port">Collector port</label>
-                    <input type="text" class="form-control form-control-sm" x-model="collectorPort" id="collector-port" placeholder="6060">
+                    <input type="text" class="form-control form-control-sm form-control-dark" x-model="collectorPort" id="collector-port" placeholder="6060">
                   </div>
 
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-sm btn-primary" @click="isConfigOpen = false">Close</button>
+                  <button type="button" class="btn btn-sm btn-outline-light" @click="isConfigOpen = false">Close</button>
                 </div>
               </div>
             </div>
@@ -223,7 +234,7 @@
                 <div class="modal-header">
                   <h5 class="modal-title">Review patch</h5>
                   <button type="button" class="close" @click="isReviewOpen = false">
-                    <span aria-hidden="true">&times;</span>
+                    &times;
                   </button>
                 </div>
                 <div class="modal-body">
@@ -231,7 +242,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-sm btn-link mr-auto" @click="getPatch(true)">Disable OverOps</button>
-                  <button type="button" class="btn btn-sm btn-primary" @click="applyPatch()">Apply patch</button>
+                  <button type="button" class="btn btn-sm btn-outline-light" @click="applyPatch()">Apply patch</button>
                 </div>
               </div>
             </div>
@@ -252,11 +263,12 @@
           numChecked: 0,
           isConfigOpen: false,
           isReviewOpen: false,
-          agent: '4.50.2',
-          collectorHost: 'overops-collector-service',
-          collectorPort: '6060',
+          agent: '',
+          collectorHost: '',
+          collectorPort: '',
           patches: [],
           search: '',
+          agentVersions: [],
 
           init() {
             fetch(apiPrefix + 'namespaces')
@@ -264,6 +276,7 @@
               .then(data => this.namespaces = data.body.items);
 
             this.getDeployments();
+            this.getAgentVersions();
           },
 
           setNamespace(namespace) {
@@ -366,11 +379,11 @@
                     env: [
                       {
                         name: 'TAKIPI_COLLECTOR_HOST',
-                        value: (disable ? null : this.collectorHost)
+                        value: (disable ? null : this.collectorHost || 'overops-collector-service')
                       },
                       {
                         name: 'TAKIPI_COLLECTOR_PORT',
-                        value: (disable ? null : this.collectorPort)
+                        value: (disable ? null : this.collectorPort || '6060')
                       }
                     ]
                   };
@@ -442,6 +455,15 @@
               return deployment.metadata.name.toLowerCase().includes(this.search.toLowerCase());
             });
           },
+
+          getAgentVersions() {
+            fetch(apiPrefix + '/repositories/overops/agent-sidecar/tags')
+              .then(response => response.json())
+              .then(data => {
+                this.agentVersions = data;
+                this.agent = data[0].name;
+              });
+          }
 
         }
       }
