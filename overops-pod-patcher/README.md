@@ -71,5 +71,5 @@ kubectl apply -f my-deployment.yaml
 ## Removing the Pod Patcher
 
 ```sh
-kubectl delete -f overops-pod-patcher.yaml
+kubectl delete -f https://raw.githubusercontent.com/takipi-field/kubernetes/master/overops-pod-patcher/overops-pod-patcher.yaml
 ```
