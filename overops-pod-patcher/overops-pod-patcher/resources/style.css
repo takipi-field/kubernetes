@@ -161,12 +161,16 @@ a:hover, .btn-link:hover, a.active {
   color: var(--white);
 }
 
-.nav-link:hover {
-  text-decoration: underline;
+.nav-link {
+  border-left: 4px solid transparent;
 }
 
 .nav-link.active {
   border-left: 4px solid #51b2e9
+}
+
+.nav-link:hover {
+  text-decoration: underline;
 }
 
 .btn-primary {
