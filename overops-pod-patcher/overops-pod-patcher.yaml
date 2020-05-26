@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: overops-pod-patcher
+  namespace: default
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: overops-pod-patcher
+rules:
+  - apiGroups: ["","apps"]
+    resources: ["namespaces","deployments","pods"]
+    verbs: ["get", "watch", "list", "patch"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: overops-pod-patcher
+subjects:
+  - kind: ServiceAccount
+    name: overops-pod-patcher
+    namespace: default
+roleRef:
+  kind: ClusterRole
+  name: overops-pod-patcher
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: overops-pod-patcher
+  labels:
+    app: overops-pod-patcher
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: overops-pod-patcher
+  template:
+    metadata:
+      labels:
+        app: overops-pod-patcher
+    spec:
+      serviceAccount: overops-pod-patcher
+      containers:
+      - image: overops/pod-patcher:0.9.0
+        name: overops-pod-patcher
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "0.1Gi"
+          limits:
+            cpu: "1000m"
+            memory: "1Gi"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: overops-pod-patcher
+spec:
+  selector:
+    app: overops-pod-patcher
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
