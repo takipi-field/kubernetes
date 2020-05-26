@@ -1,6 +1,6 @@
 # OverOps Pod Patcher
 
-The Pod Patcher provides a UI for applying the agent sidecar and required environment variables to existing deployments running in a Kubernetes cluster.
+The Pod Patcher provides a UI for applying the [agent sidecar](../agent/sidecar) and required environment variables to existing deployments running in a Kubernetes cluster.
 
 This technique leverages the `JAVA_TOOL_OPTIONS` environment variable to attach the agent to the JVM together with an initContainer which supplies the agent to pods using a volume.
 
