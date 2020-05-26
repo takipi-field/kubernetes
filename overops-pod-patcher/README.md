@@ -4,7 +4,7 @@ The Pod Patcher provides a UI for applying the agent sidecar and required enviro
 
 This technique leverages the `JAVA_TOOL_OPTIONS` environment variable to attach the agent to the JVM together with an initContainer which supplies the agent to pods using a volume.
 
-![OverOps Pod Patcher](/readme/opp.png)
+![OverOps Pod Patcher](readme/opp.png)
 
 ## Prerequisites
 
@@ -30,7 +30,7 @@ In a browser, navigate to [http://localhost:8001/api/v1/namespaces/default/servi
 
 ## Configure the agent
 
-![OverOps Pod Patcher](/readme/configure-agent.png)
+![OverOps Pod Patcher](readme/configure-agent.png)
 
 Click **Configure agent** in the upper right to select the agent version and specify the collector host and port. By default, the latest agent will be used. If not specified, the default collector host is `overops-collector-service` and the default collector port is `6060`.
 
@@ -38,15 +38,15 @@ Click **Configure agent** in the upper right to select the agent version and spe
 
 ## Patching a deployment
 
-![OverOps Pod Patcher](/readme/configure-patch.png)
+![OverOps Pod Patcher](readme/configure-patch.png)
 
 Select entire deployments or individual pods to be patched. Enter an application name and deployment name for each pod, used to identify the app in OverOps.
 
-![OverOps Pod Patcher](/readme/review-patch.png)
+![OverOps Pod Patcher](readme/review-patch.png)
 
 Click **Review patch** to review changes, then click **Apply patch** to apply the changes.
 
-![OverOps Pod Patcher](/readme/patch-applied.png)
+![OverOps Pod Patcher](readme/patch-applied.png)
 
 Once the patch has been applied, a label next to the deployment name will indicate that that agent sidecar has been added. Each pod will display application and deployment names, as well as the collector endpoint.
 
@@ -54,7 +54,7 @@ To update the agent, change the collector endpoint or edit application and deplo
 
 ## Disabling OverOps
 
-![OverOps Pod Patcher](/readme/disable.png)
+![OverOps Pod Patcher](readme/disable.png)
 
 To disable OverOps, select deployments or pods which have been patched, click **Review patch**, click **Disable OverOps**, then click **Apply patch**.
 
