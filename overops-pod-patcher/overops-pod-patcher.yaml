@@ -44,9 +44,9 @@ spec:
     spec:
       serviceAccount: overops-pod-patcher
       containers:
-      - image: overops/pod-patcher:latest
+      - image: overops/pod-patcher:0.9.0
         name: overops-pod-patcher
-        imagePullPolicy: Never
+        imagePullPolicy: IfNotPresent
         resources:
           requests:
             cpu: "100m"
