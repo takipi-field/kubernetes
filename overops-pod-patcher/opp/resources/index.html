@@ -37,24 +37,11 @@
         </div>
         <div>
           <button
-            class="btn btn-sm btn-outline-light ml-auto mr-2"
+            class="btn btn-sm btn-outline-light ml-auto mr-3"
             type="button"
             @click.prevent="isConfigOpen = true; $nextTick(() => $refs.modalConfig.focus());"
           >
             Configure agent
-          </button>
-          <button
-            class="btn btn-sm btn-light mr-3"
-            x-bind:disabled="numChecked < 1"
-            type="button"
-            @click.prevent="
-              createPatch(false);
-              isReviewOpen = true;
-              $nextTick(() => $refs.modalReview.focus());
-            "
-          >
-            <span class="badge badge-dark mr-1 pt-1" x-text="numChecked"></span>
-            Review patch
           </button>
         </div>
       </nav>
@@ -190,6 +177,31 @@
             </template>
 
           </main>
+
+          <nav
+            class="navbar bg-dark footer"
+            x-show="numChecked > 0"
+            x-transition:enter="transition"
+            x-transition:enter-start="max-height-0"
+            x-transition:enter-end="max-height-100"
+            x-transition:leave="transition"
+            x-transition:leave-start="max-height-100"
+            x-transition:leave-end="max-height-0"
+          >
+            <button
+              class="btn btn-sm btn-light ml-auto"
+              x-bind:disabled="numChecked < 1"
+              type="button"
+              @click.prevent="
+                createPatch(false);
+                isReviewOpen = true;
+                $nextTick(() => $refs.modalReview.focus());
+              "
+            >
+              <span class="badge badge-dark mr-1 pt-1" x-text="numChecked"></span>
+              Review patch
+            </button>
+          </nav>
 
           <div
             class="modal fade show"
