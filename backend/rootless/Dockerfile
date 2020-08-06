@@ -1,10 +1,10 @@
-FROM centos:7
+FROM centos:8
 
 # update
-RUN yum -y update
+RUN dnf -y update
 
 # install OpenJDK 8
-RUN yum install -y java-1.8.0-openjdk-devel
+RUN dnf install --noplugins -y java-1.8.0-openjdk-devel
 
 # create private directory
 RUN mkdir /opt/private
