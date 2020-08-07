@@ -1,11 +1,14 @@
-FROM openjdk:8-slim
+FROM centos:8
 
-# install curl
-RUN apt-get update; apt-get install -y curl
+# update
+RUN dnf -y update
+
+# install OpenJDK 8
+RUN dnf install --noplugins -y java-1.8.0-openjdk-devel
 
 # rootless
 RUN groupadd --gid 1000 overops
-RUN adduser --system --disabled-password --home /opt/takipi-storage --uid 1000 --gid 1000 overops
+RUN adduser --home /opt/takipi-storage --uid 1000 -g 1000 overops
 USER 1000:1000
 
 # install into the /opt directory

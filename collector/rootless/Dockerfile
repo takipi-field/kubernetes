@@ -1,7 +1,10 @@
-FROM centos:6
+FROM centos:8
+
+# update
+RUN dnf -y update
 
 # install OpenJDK 8
-RUN yum install -y java-1.8.0-openjdk
+RUN dnf install --noplugins -y java-1.8.0-openjdk
 
 # rootless
 RUN groupadd --gid 1000 overops
