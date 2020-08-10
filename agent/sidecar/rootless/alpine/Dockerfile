@@ -32,6 +32,7 @@ WORKDIR /opt/takipi
 RUN echo "#!/bin/sh" > run.sh \
  && echo "cat /opt/takipi/VERSION" >> run.sh \
  && echo "cp -a /opt/takipi/. /takipi/" >> run.sh \
+ && echo "exit 0" >> run.sh \
  && chmod +x run.sh
 
 CMD ["./run.sh"]
