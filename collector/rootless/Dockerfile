@@ -24,6 +24,7 @@ RUN curl -sL https://app.overops.com/app/download?t=tgz | tar -xvzf -
 # use mount to make installation.key and collector.properties available
 WORKDIR /opt/takipi
 RUN mkdir private \
+ && touch log/bugtale_service.log \
  && touch private/installation.key \
  && touch private/collector.properties \
  && ln -s private/installation.key installation.key \
@@ -32,5 +33,6 @@ VOLUME ["/opt/takipi/private"]
 
 EXPOSE 6060
 
-# run the service in verbose mode, printing logs to stdout
-CMD ["/opt/takipi/bin/takipi-service", "-l"]
+# run the service in the background, tailing the log to stdout
+ENTRYPOINT /opt/takipi/bin/takipi-service& \
+        tail -f /opt/takipi/log/bugtale_service.log
