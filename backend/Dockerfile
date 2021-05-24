@@ -35,6 +35,7 @@ RUN mv /opt/takipi-server/conf/tomcat-original/my.server.properties private/my.s
  && mv /opt/takipi-server/conf/tomcat-original/smtp.properties private/smtp.properties \
  && mv /opt/takipi-server/conf/tomcat-original/smtpserver.properties private/smtpserver.properties \
  && touch private/my.agentsettings.properties \
+ && mkdir -p /opt/takipi-server/log/tomcat/tomcat \
  && mkdir -p /opt/takipi-server/conf/tomcat/shared \
  && ln -s /opt/private/my.server.properties /opt/takipi-server/conf/tomcat/shared/my.server.properties \
  && ln -s /opt/private/smtp.properties /opt/takipi-server/conf/tomcat/shared/smtp.properties \
@@ -50,6 +51,7 @@ WORKDIR /opt/takipi-server
 # create a run script
 RUN echo "#!/bin/bash" > run.sh \
  && echo "cat /opt/takipi-server/VERSION" >> run.sh \
+ && echo "touch /opt/takipi-server/log/tomcat/tomcat/catalina.log" >> run.sh \
  && echo "if [ -r /opt/takipi-server/storage/s3/data/onprem-sparktale/125/93/kd/KD.class ]" >> run.sh \
  && echo "then" >> run.sh \
  && echo "cp -p /opt/takipi-server/storage/s3/data/onprem-sparktale/125/93/kd/KD.class /opt/takipi-server/conf/tomcat/shared/." >> run.sh \
