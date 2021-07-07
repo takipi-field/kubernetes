@@ -8,20 +8,21 @@ spec:
     emptyDir: {}
   initContainers:
     - name: overops-agent
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
       image: overops/agent-sidecar:latest
       imagePullPolicy: Always
-      resources:
-        requests:
-          cpu: "100m"
-          memory: "100Mi"
-        limits:
-          cpu: "100m"
-          memory: "100Mi"
       volumeMounts:
       - name: overops-agent
         mountPath: /takipi
   containers:
     - name: event-generator
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
       image: 432746435694.dkr.ecr.us-east-1.amazonaws.com/event-generator:no-flags
       imagePullPolicy: Always
       resources:

@@ -95,3 +95,7 @@ To remove:
 ```console
 kubectl delete -f overops-storage-server-s3.yaml
 ```
+
+### Note about Security Context
+
+Starting with version 4.56.0, all published images to Docker hub are now "rootless." Images are now using the base image openjdk:8-jre-slim and running with user ID 1000 and group ID 1000 instead of the root user. This is now reflected in the kubernetes deployment's security context.
