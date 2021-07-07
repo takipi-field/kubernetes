@@ -26,6 +26,10 @@ spec:
       labels:
         app: overops-server
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000      
       containers:
         - name: overops-server
           image: overops/server:latest

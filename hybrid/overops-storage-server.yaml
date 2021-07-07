@@ -14,17 +14,21 @@ spec:
       labels:
         app: overops-storage-server
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000    
       containers:
-      - name: overops-storage-server
-        image: overops/storage-server:latest
-        ports:
-        - containerPort: 8080
-        imagePullPolicy: Always
-        volumeMounts:
-          - mountPath: /opt/takipi-storage/storage
-            name: takipi-storage-volume
-          - mountPath: /opt/takipi-storage/private
-            name: overops-storage-private-volume
+        - name: overops-storage-server
+          image: overops/storage-server:latest
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: /opt/takipi-storage/storage
+              name: takipi-storage-volume
+            - mountPath: /opt/takipi-storage/private
+              name: overops-storage-private-volume
       volumes:
         - name: overops-storage-private-volume
           secret:
