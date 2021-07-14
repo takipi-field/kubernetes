@@ -19,6 +19,7 @@ RUN curl -sL https://app.overops.com/app/download?t=tgz | tar -xvzf -
 
 # use mount to make installation.key and collector.properties available
 WORKDIR /opt/takipi
+
 RUN mkdir private \
  && touch log/bugtale_service.log \
  && touch private/installation.key \
@@ -26,6 +27,7 @@ RUN mkdir private \
  && ln -s private/installation.key installation.key \
  && ln -s private/collector.properties collector.properties
 VOLUME ["/opt/takipi/private"]
+VOLUME ["/opt/takipi/work"]
 
 EXPOSE 6060
 
