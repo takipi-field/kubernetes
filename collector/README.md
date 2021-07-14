@@ -57,6 +57,15 @@ To run in the background:
 docker run -d -p 6060:6060 --mount type=bind,source="$(pwd)"/private,target=/opt/takipi/private overops-collector
 ```
 
+### Optional: Work Volume
+
+The container now supports a volume for the "work" directory allow for persistent volume to be used by the collector that holds symbols and data that can persist restarts.
+
+```console
+mkdir ./work
+docker run -p 6060:6060 --mount type=bind,source="$(pwd)"/private,target=/opt/takipi/private --mount type=bind,source="$(pwd)"/work,target=/opt/takipi/work -it overops-collector /bin/bash
+```
+
 ## Run in Kubernetes
 
 In Kubernetes, we'll store `installation.key` and `collector.properties` as a [Secret](https://kubernetes.io/docs/concepts/configuration/secret/). This allows for streamlined management of installation keys and configurations.
