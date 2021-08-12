@@ -39,7 +39,7 @@ docker build . -t overops-collector
 
 ## Run in Docker
 
-This container expects a `private` directory containing `installation.key` and `collector.properties` to be mounted into the `/opt/takipi/private` directory. When running the container, we'll mount the `private` directory into the container. Note that mount paths cannot be relative. We'll also forward port 6060 from the host machine to the container.
+This container expects a `private` directory containing `installation.key` and `collector.properties` to be mounted into the `/opt/takipi/private` directory. When running the container, we'll mount the `private` directory into the container. Note that mount paths cannot be relative. We'll also forward port 6060 from the host machine to the container. For multi-environment collector configuration, an `installation.token` can also be provided (See this [page](https://doc.overops.com/docs/multi-environment-collector) for more info)
 
 ```console
 docker run -p 6060:6060 --mount type=bind,source="$(pwd)"/private,target=/opt/takipi/private overops-collector

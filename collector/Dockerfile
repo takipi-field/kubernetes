@@ -23,8 +23,10 @@ WORKDIR /opt/takipi
 RUN mkdir private \
  && touch log/bugtale_service.log \
  && touch private/installation.key \
+ && touch private/installation.token \
  && touch private/collector.properties \
  && ln -s private/installation.key installation.key \
+ && ln -s private/installation.token installation.token \
  && ln -s private/collector.properties collector.properties
 VOLUME ["/opt/takipi/private"]
 VOLUME ["/opt/takipi/work"]
