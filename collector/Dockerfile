@@ -21,7 +21,6 @@ RUN curl -sL https://app.overops.com/app/download?t=tgz | tar -xvzf -
 WORKDIR /opt/takipi
 
 RUN mkdir private \
- && touch log/bugtale_service.log \
  && touch private/installation.key \
  && touch private/installation.token \
  && touch private/collector.properties \
@@ -35,4 +34,4 @@ EXPOSE 6060
 
 # run the service in the background, tailing the log to stdout
 ENTRYPOINT /opt/takipi/bin/takipi-service& \
-	tail -f /opt/takipi/log/bugtale_service.log
+	tail -F /opt/takipi/log/bugtale_service.log
