@@ -17,6 +17,7 @@ USER 1000:1000
 # environmental variables
 ENV HOST_URL localhost:8080
 ENV FRONTEND_URL http://localhost:8080
+ENV CATALINA_OPTS=
 
 ENV DB_TYPE h2
 ENV DB_URL database_server_url
