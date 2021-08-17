@@ -51,14 +51,13 @@ WORKDIR /opt/takipi-server
 # create a run script
 RUN echo "#!/bin/bash" > run.sh \
  && echo "cat /opt/takipi-server/VERSION" >> run.sh \
- && echo "touch /opt/takipi-server/log/tomcat/tomcat/catalina.log" >> run.sh \
  && echo "if [ -r /opt/takipi-server/storage/s3/data/onprem-sparktale/125/93/kd/KD.class ]" >> run.sh \
  && echo "then" >> run.sh \
  && echo "cp -p /opt/takipi-server/storage/s3/data/onprem-sparktale/125/93/kd/KD.class /opt/takipi-server/conf/tomcat/shared/." >> run.sh \
  && echo "fi" >> run.sh \
  && echo "/opt/takipi-server/bin/takipi-server.sh -u \${HOST_URL} --frontend-url \${FRONTEND_URL} --db-type \${DB_TYPE} --db-url \${DB_URL} --db-user \${DB_USER} --db-password \${DB_PASS} \${DB_SSL} --skip-resource-validation start" >> run.sh \
  && echo "/bin/sleep 10" >> run.sh \
- && echo "/usr/bin/tail -f /opt/takipi-server/log/tomcat/stdout -f /opt/takipi-server/log/tomcat/stderr -f /opt/takipi-server/log/tomcat/tomcat/catalina.log" >> run.sh \
+ && echo "/usr/bin/tail -F /opt/takipi-server/log/tomcat/stdout -F /opt/takipi-server/log/tomcat/stderr -F /opt/takipi-server/log/tomcat/tomcat/catalina.log" >> run.sh \
  && chmod +x run.sh
 
 # print version
