@@ -45,6 +45,7 @@ RUN mv /opt/takipi-server/conf/tomcat-original/my.server.properties private/my.s
 VOLUME ["/opt/private"]
 
 # use a volume to store data
+RUN mkdir /opt/takipi-server/storage && chown overops:overops /opt/takipi-server/storage
 VOLUME ["/opt/takipi-server/storage"]
 
 WORKDIR /opt/takipi-server
