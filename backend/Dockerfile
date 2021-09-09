@@ -41,11 +41,11 @@ RUN mv /opt/takipi-server/conf/tomcat-original/my.server.properties private/my.s
  && ln -s /opt/private/my.server.properties /opt/takipi-server/conf/tomcat/shared/my.server.properties \
  && ln -s /opt/private/smtp.properties /opt/takipi-server/conf/tomcat/shared/smtp.properties \
  && ln -s /opt/private/smtpserver.properties /opt/takipi-server/conf/tomcat/shared/smtpserver.properties \
- && ln -s /opt/private/my.agentsettings.properties /opt/takipi-server/conf/tomcat/shared/my.agentsettings.properties
+ && ln -s /opt/private/my.agentsettings.properties /opt/takipi-server/conf/tomcat/shared/my.agentsettings.properties && \
+ && mkdir /opt/takipi-server/storage
 VOLUME ["/opt/private"]
 
 # use a volume to store data
-RUN mkdir /opt/takipi-server/storage && chown overops:overops /opt/takipi-server/storage
 VOLUME ["/opt/takipi-server/storage"]
 
 WORKDIR /opt/takipi-server
