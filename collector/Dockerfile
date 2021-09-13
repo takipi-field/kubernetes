@@ -35,4 +35,4 @@ EXPOSE 6060
 
 # run the service in the background, tailing the log to stdout
 ENTRYPOINT /opt/takipi/bin/takipi-service& \
-	tail -F /opt/takipi/log/bugtale_service.log
+	tail -F /opt/takipi/log/bugtale_service.log -F /opt/takipi/log/bugtale_service_poco.log
