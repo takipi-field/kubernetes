@@ -26,7 +26,8 @@ RUN mkdir private \
  && touch private/collector.properties \
  && ln -s private/installation.key installation.key \
  && ln -s private/installation.token installation.token \
- && ln -s private/collector.properties collector.properties
+ && ln -s private/collector.properties collector.properties \
+ && mkdir -p work
 VOLUME ["/opt/takipi/private"]
 VOLUME ["/opt/takipi/work"]
 
