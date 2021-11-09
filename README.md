@@ -40,10 +40,10 @@ minikube version: v0.30.0
 ```
 
 ## Start your cluster
-To start the cluster, simply run `minikube start`. Later, we'll be using [Pod Presets](https://kubernetes.io/docs/concepts/workloads/pods/podpreset/), which requires additional cluster configuration. To enable Pod Presets, start your cluster with this command:
+To start the cluster, simply run `minikube start`:
 
 ```console
-$ minikube start --extra-config=apiserver.runtime-config=api/all=true --extra-config=apiserver.admission-control="NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota,PodPreset"
+$ minikube start
 ```
 
 ### Set Docker environmental variables
@@ -63,7 +63,7 @@ To stop the cluster, simply run `minikube stop`.
 ## Next Steps
 
 - [Deploy a Collector](collector)
-- [Create a Pod Preset for the Agent](agent)
+- [Deply an Application with an Agent](agent)
 - [Monitor containerized apps](demos)
 
 ## Docker Commands Cheat Sheet
@@ -85,7 +85,6 @@ Basic Kubernetes command can be found on the [Kubernetes Cheat Sheet](https://ku
 - get pods `kubectl get pods`
 - get deployments `kubectl get deployments`
 - get services `kubectl get services`
-- get pod presets `kubectl get podPresets`
 - tail pod logs `kubectl tail -f my-pod`
 - get logs for a deployment by tag `kubectl logs -l app=my-app`
 - scale a deployment `kubectl scale deployment my-deployment --replicas=3`
