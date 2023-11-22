@@ -1,6 +1,8 @@
 FROM openjdk:8-jre-slim
 LABEL maintainer="support@overops.com"
 
+ARG TAKIPI_SERVER_URL=https://s3.amazonaws.com/app-takipi-com/deploy/takipi-server/takipi-server-java.tar.gz
+
 # install curl and procps
 RUN apt-get update; apt-get install -y curl procps
 
@@ -29,7 +31,7 @@ ENV DB_SSL --no-db-ssl
 WORKDIR /opt
 
 # download and install the backend
-RUN curl -sL https://s3.amazonaws.com/app-takipi-com/deploy/takipi-server/takipi-server-java.tar.gz | tar -xvzf -
+RUN curl -sL ${TAKIPI_SERVER_URL} | tar -xvzf -
 
 # use mount to make .properties files available
 RUN mv /opt/takipi-server/conf/tomcat-original/my.server.properties private/my.server.properties \
