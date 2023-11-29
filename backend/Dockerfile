@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-slim
+FROM openjdk:8u121-jre
 LABEL maintainer="support@overops.com"
 
 ARG TAKIPI_SERVER_URL=https://s3.amazonaws.com/app-takipi-com/deploy/takipi-server/takipi-server-java.tar.gz
