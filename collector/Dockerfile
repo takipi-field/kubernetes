@@ -1,21 +1,24 @@
-FROM openjdk:8-jre-slim
+FROM us.gcr.io/overops-play/overops/ubi8/java17:17.0
 LABEL maintainer="support@overops.com"
+
+ARG COLLECTOR_URL=https://app.overops.com/app/download?t=tgz
 
 ENV JVM_LIB_FILE /usr/local/openjdk-8/lib/amd64/server/libjvm.so
 
 # install curl
-RUN apt-get update; apt-get install -y curl
+# RUN apt-get update; apt-get install -y curl
 
 # rootless
-RUN groupadd --gid 1000 overops
-RUN adduser --home /opt/takipi --uid 1000 --gid 1000 overops
-USER 1000:1000
+USER root
+# RUN groupadd --gid 1000 overops
+# RUN adduser --home /opt/takipi --uid 1000 --gid 1000 overops
+# USER 1000:1000
 
 # install into the /opt directory
 WORKDIR /opt
 
 # download and install the collector
-RUN curl -sL https://app.overops.com/app/download?t=tgz | tar -xvzf -
+RUN curl -sL ${COLLECTOR_URL} | tar -xvzf -
 
 # use mount to make installation.key and collector.properties available
 WORKDIR /opt/takipi

@@ -1,18 +1,21 @@
-FROM openjdk:8-jre-slim
+FROM us.gcr.io/overops-play/overops/ubi8/java17:17.0
 LABEL maintainer="support@overops.com"
 
+ARG TAKIPI_SERVER_URL=https://s3.amazonaws.com/app-takipi-com/deploy/takipi-server/takipi-server-java.tar.gz
+
 # install curl and procps
-RUN apt-get update; apt-get install -y curl procps
+# RUN apt-get update; apt-get install -y curl procps
 
 # add rootless user
-RUN groupadd --gid 1000 overops
-RUN adduser --home /opt/takipi-server --uid 1000 --gid 1000 overops
+USER root
+# RUN groupadd --gid 1000 overops
+# RUN adduser --home /opt/takipi-server --uid 1000 --gid 1000 overops
 
 # create and change ownership of private directory
-RUN mkdir /opt/private; chown overops:overops /opt/private
+RUN mkdir /opt/private; chown root:root /opt/private
 
 # rootless
-USER 1000:1000
+# USER 1000:1000
 
 # environmental variables
 ENV HOST_URL localhost:8080
@@ -29,7 +32,7 @@ ENV DB_SSL --no-db-ssl
 WORKDIR /opt
 
 # download and install the backend
-RUN curl -sL https://s3.amazonaws.com/app-takipi-com/deploy/takipi-server/takipi-server-java.tar.gz | tar -xvzf -
+RUN curl -sL ${TAKIPI_SERVER_URL} | tar -xvzf -
 
 # use mount to make .properties files available
 RUN mv /opt/takipi-server/conf/tomcat-original/my.server.properties private/my.server.properties \
