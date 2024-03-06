@@ -15,7 +15,7 @@ USER root
 RUN mkdir /opt/private; chown root:root /opt/private
 
 # rootless
-USER 1000:1000
+# USER 1000:1000
 
 # environmental variables
 ENV HOST_URL localhost:8080
