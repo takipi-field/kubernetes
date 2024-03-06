@@ -6,7 +6,7 @@ ARG COLLECTOR_URL=https://app.overops.com/app/download?t=tgz
 ENV JVM_LIB_FILE /usr/local/openjdk-8/lib/amd64/server/libjvm.so
 
 # install curl
-RUN apt-get update; apt-get install -y curl
+# RUN apt-get update; apt-get install -y curl
 
 # rootless
 RUN groupadd --gid 1000 overops

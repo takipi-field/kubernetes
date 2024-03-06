@@ -4,7 +4,7 @@ LABEL maintainer="support@overops.com"
 ARG TAKIPI_SERVER_URL=https://s3.amazonaws.com/app-takipi-com/deploy/takipi-server/takipi-server-java.tar.gz
 
 # install curl and procps
-RUN apt-get update; apt-get install -y curl procps
+# RUN apt-get update; apt-get install -y curl procps
 
 # add rootless user
 RUN groupadd --gid 1000 overops
