@@ -1,4 +1,4 @@
-FROM openjdk:8u121-jre
+FROM us.gcr.io/platform-205701/harness/ubi8/java17:17.0
 LABEL maintainer="support@overops.com"
 
 ARG TAKIPI_SERVER_URL=https://s3.amazonaws.com/app-takipi-com/deploy/takipi-server/takipi-server-java.tar.gz

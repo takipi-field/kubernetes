@@ -1,5 +1,7 @@
-FROM openjdk:8-jre-slim
+FROM us.gcr.io/platform-205701/harness/ubi8/java17:17.0
 LABEL maintainer="support@overops.com"
+
+ARG COLLECTOR_URL=https://app.overops.com/app/download?t=tgz
 
 ENV JVM_LIB_FILE /usr/local/openjdk-8/lib/amd64/server/libjvm.so
 
@@ -15,7 +17,7 @@ USER 1000:1000
 WORKDIR /opt
 
 # download and install the collector
-RUN curl -sL https://app.overops.com/app/download?t=tgz | tar -xvzf -
+RUN curl -sL ${COLLECTOR_URL} | tar -xvzf -
 
 # use mount to make installation.key and collector.properties available
 WORKDIR /opt/takipi
