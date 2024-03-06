@@ -1,4 +1,4 @@
-FROM us.gcr.io/platform-205701/harness/ubi8/java17:17.0
+FROM us.gcr.io/overops-play/overops/ubi8/java17:17.0
 LABEL maintainer="support@overops.com"
 
 ARG COLLECTOR_URL=https://app.overops.com/app/download?t=tgz
