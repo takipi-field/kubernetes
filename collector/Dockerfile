@@ -9,9 +9,10 @@ ENV JVM_LIB_FILE /usr/local/openjdk-8/lib/amd64/server/libjvm.so
 # RUN apt-get update; apt-get install -y curl
 
 # rootless
-RUN groupadd --gid 1000 overops
-RUN adduser --home /opt/takipi --uid 1000 --gid 1000 overops
-USER 1000:1000
+USER root
+# RUN groupadd --gid 1000 overops
+# RUN adduser --home /opt/takipi --uid 1000 --gid 1000 overops
+# USER 1000:1000
 
 # install into the /opt directory
 WORKDIR /opt

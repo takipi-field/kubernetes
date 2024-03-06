@@ -7,11 +7,12 @@ ARG TAKIPI_SERVER_URL=https://s3.amazonaws.com/app-takipi-com/deploy/takipi-serv
 # RUN apt-get update; apt-get install -y curl procps
 
 # add rootless user
-RUN groupadd --gid 1000 overops
-RUN adduser --home /opt/takipi-server --uid 1000 --gid 1000 overops
+USER root
+# RUN groupadd --gid 1000 overops
+# RUN adduser --home /opt/takipi-server --uid 1000 --gid 1000 overops
 
 # create and change ownership of private directory
-RUN mkdir /opt/private; chown overops:overops /opt/private
+RUN mkdir /opt/private; chown root:root /opt/private
 
 # rootless
 USER 1000:1000
