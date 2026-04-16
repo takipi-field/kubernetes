@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-slim
+FROM openjdk:11.0.8-jre-slim
 LABEL maintainer="support@overops.com"
 
 ENV JVM_LIB_FILE /usr/local/openjdk-8/lib/amd64/server/libjvm.so
